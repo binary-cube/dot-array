@@ -259,7 +259,7 @@ class DotArray implements
      *
      * @return array
      */
-    protected function mergeRecursive($a, $b)
+    protected static function mergeRecursive($a, $b)
     {
         $args = \func_get_args();
         $res  = \array_shift($args);
@@ -448,7 +448,7 @@ class DotArray implements
 
     /**
      * @param null|string $key
-     * @param null        $default
+     * @param null|mixed  $default
      *
      * @return mixed|static
      */
@@ -513,14 +513,10 @@ class DotArray implements
      */
     public function clear($keys = null, $value = [])
     {
-        if (!isset($keys)) {
-            $this->items = [];
-        } else {
-            $keys = (array) $keys;
+        $keys = (array) (!isset($keys) ? [$keys] : $keys);
 
-            foreach ($keys as $key) {
-                $this->write($key, $value);
-            }
+        foreach ($keys as $key) {
+            $this->write($key, $value);
         }
 
         return $this;
@@ -714,7 +710,7 @@ class DotArray implements
                     // Search for operation.
                     if (\in_array($operation, $filter['tokens'])) {
                         $closure = \Closure::fromCallable(
-                            function ($item, $key) use ($filter, $property, $value) {
+                            function ($item) use ($filter, $property, $value) {
                                 $item = (array) $item;
 
                                 if (!array_key_exists($property, $item)) {
@@ -734,7 +730,7 @@ class DotArray implements
         // Dummy closure if nothing is provided.
         if (empty($closure)) {
             $closure = \Closure::fromCallable(
-                function ($value, $key) {
+                function () {
                     return true;
                 }
             );

@@ -180,9 +180,19 @@ class BasicArrayTest extends TestCase
         $dot  = DotArray::create($data);
 
         $dot->clear('assoc_array.two');
+        $dot->clear(['assoc_array.one', 'assoc_array.three']);
 
+        $users = $dot->get('mixed_array.users')->clear();
+
+        self::assertIsArray($dot->get('assoc_array.one')->toArray());
         self::assertIsArray($dot->get('assoc_array.two')->toArray());
+        self::assertIsArray($dot->get('assoc_array.three')->toArray());
+        self::assertIsArray($users->toArray());
+
+        self::assertEmpty($dot->get('assoc_array.one')->toArray());
         self::assertEmpty($dot->get('assoc_array.two')->toArray());
+        self::assertEmpty($dot->get('assoc_array.three')->toArray());
+        self::assertEmpty($users->toArray());
     }
 
 
