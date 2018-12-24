@@ -254,12 +254,12 @@ class DotArray implements
 
 
     /**
-     * @param array|DotArray|mixed $a
-     * @param array|DotArray|mixed $b
+     * @param array|DotArray|mixed      $array1
+     * @param null|array|DotArray|mixed $array2
      *
      * @return array
      */
-    protected static function mergeRecursive($a, $b)
+    protected static function mergeRecursive($array1, $array2 = null)
     {
         $args = \func_get_args();
         $res  = \array_shift($args);
@@ -301,12 +301,12 @@ class DotArray implements
      * For integer-keyed elements, the elements from the latter array will
      * be appended to the former array.
      *
-     * @param array|DotArray|mixed $a Array to be merged from. You can specify additional
-     *                                arrays via third argument, fourth argument etc.
+     * @param array|DotArray|mixed $array Array to be merged from. You can specify additional
+     *                                    arrays via second argument, third argument, fourth argument etc.
      *
      * @return static
      */
-    public function merge($a)
+    public function merge($array)
     {
         $this->items = \call_user_func_array(
             [
@@ -709,17 +709,15 @@ class DotArray implements
                 foreach ($filters as $filter) {
                     // Search for operation.
                     if (\in_array($operation, $filter['tokens'])) {
-                        $closure = \Closure::fromCallable(
-                            function ($item) use ($filter, $property, $value) {
-                                $item = (array) $item;
+                        $closure = function ($item) use ($filter, $property, $value) {
+                            $item = (array) $item;
 
-                                if (!array_key_exists($property, $item)) {
-                                    return false;
-                                }
-
-                                return $filter['closure']($item, $property, $value);
+                            if (!array_key_exists($property, $item)) {
+                                return false;
                             }
-                        );
+
+                            return $filter['closure']($item, $property, $value);
+                        };
 
                         break;
                     }//end if
@@ -729,11 +727,9 @@ class DotArray implements
 
         // Dummy closure if nothing is provided.
         if (empty($closure)) {
-            $closure = \Closure::fromCallable(
-                function () {
-                    return true;
-                }
-            );
+            $closure = function () {
+                return true;
+            };
         }
 
         return $this->filter($closure, ARRAY_FILTER_USE_BOTH);

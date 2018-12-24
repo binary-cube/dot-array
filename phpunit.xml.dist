@@ -28,10 +28,11 @@
 
 
     <logging>
-        <log type="tap" target="build/phpunit/report.tap"/>
-        <log type="junit" target="build/phpunit/report.junit.xml"/>
-        <log type="coverage-html" target="build/phpunit/coverage"/>
-        <log type="coverage-text" target="build/phpunit/coverage.txt"/>
-        <log type="coverage-clover" target="build/phpunit/logs/clover.xml"/>
+        <log type="tap"     target="build/phpunit/report.tap"/>
+        <log type="junit"   target="build/phpunit/report.junit.xml"/>
+
+        <log type="coverage-html"   target="build/phpunit/coverage/html"/>
+        <log type="coverage-text"   target="build/phpunit/coverage/txt"/>
+        <log type="coverage-clover" target="build/phpunit/coverage/xml"/>
     </logging>
 </phpunit>

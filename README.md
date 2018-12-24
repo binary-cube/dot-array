@@ -19,13 +19,14 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 ## Installing
 
-- **via "composer require"**
-    ```shell
-    composer require binary-cube/dot-array
+- **via "composer require"**:
+
+    ``` shell
+        composer require binary-cube/dot-array
     ```
 
-- **via composer (manually)**
-    
+- **via composer (manually)**:
+
     If you're using Composer to manage dependencies, you can include the following
     in your `composer.json` file:
 
@@ -39,29 +40,28 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 ## Usage
 
-
->#### REMEMBER: YOU NEED TO KNOW YOUR DATA!
->#### DotArray::get() can return a new instance of DotArray in case the accessed path is an array or it will return the raw data value or the default given value.
+>##### REMEMBER: YOU NEED TO KNOW YOUR DATA
+>##### DotArray::get() can return a new instance of DotArray in case the accessed path is an array or it will return the raw data value or the default given value
 
 - **instantiation**:
-    - ```php
+    -   ```php
         new DotArray($array);
         DotArray::create($array);
         DotArray::createFromJson($jsonString);
-      ```
+        ```
 
 - **get**:
-    - ```php
+    -   ```php
         // Because the key `sci-fi & fantasy` is array the returning value it will be a new instance of DotArray.
         $dot('books.{sci-fi & fantasy}');
-  
+        
         // Because the price is not an array, the result will be raw data, float in this case.
         $dot('books.{sci-fi & fantasy}.0.price');
-    
+        
         // Accessing the raw array.
         $dot('books.{sci-fi & fantasy}')->toArray();
         $dot->get('books.{sci-fi & fantasy}')->toArray();
-  
+        
         // Accessing the last leaf and getting the raw data.
         $dot('books.{sci-fi & fantasy}.0.name');
         $dot->get('books.{sci-fi & fantasy}.0.name');
@@ -69,10 +69,10 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         // Vanilla PHP.
         $dot('books.{sci-fi & fantasy}.0.name');
         $dot['books']['sci-fi & fantasy'][0]['name'];
-      ```
+        ```
 
 - **get :: more-complex**:
-    - ```php
+    -   ```php
         // Using dotted key and accessing without getting confused.
         // Allowed tokens for keeping the names with dot(.) togethers are: '', "", [], (), {}
         $dot->get('config.{elastic-search}.\'v5.0\'.host')
@@ -80,42 +80,42 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         $dot->get('config.{elastic-search}.[v5.0].host')
         $dot->get('config.{elastic-search}.(v5.0).host')
         $dot->get('config.{elastic-search}.{v5.0}.host')
-      ```
+        ```
 
 - **set**:
-    - ```php
+    -   ```php
         $dot->set('books.{sci-fi & fantasy}.0.name', 'New Name');
-  
+        
         // Vanilla PHP.
         $dot['books.{sci-fi & fantasy}.0.name'] = 'New Name';
         $dot['books']['sci-fi & fantasy'][0]['name'] = 'New Name';
-      ```
+        ```
 
 - **clear** *(empty array <=> [])*:
-    - ```php
+    -   ```php
         $dot->clear('books.{sci-fi & fantasy}');
         $dot->clear('books.{sci-fi & fantasy}', null);
         $dot->clear('books.{sci-fi & fantasy}.0.name', null);
-  
+        
         // Multiple keys.
         $dot->clear([
           'books.{sci-fi & fantasy}',
           'books.{childre\'s books}'
         ]);
-  
+        
         // Vanilla PHP.
         $dot['books.{sci-fi & fantasy}'] = [];
-      ```
+        ```
 
 - **delete** *(unset(...))*:
-    - ```php
+    -   ```php
         $dot->delete('books.{sci-fi & fantasy}');
         $dot->delete('books.{sci-fi & fantasy}.0.name');
         $dot->delete(['books.{sci-fi & fantasy}.0', 'books.{childre\'s books}.0']);
-      ```
+        ```
 
 - **find**:
-    - ```php 
+    -   ```php
         /*
             Find the first item in an array that passes the truth test, otherwise return false
             The signature of the callable must be: `function ($value, $key)`.
@@ -123,23 +123,23 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         $book = $dot->get('books.{childre\'s books}')->find(function ($value, $key) {
            return $value['price'] > 0;
         });
-      ```
+        ```
 
 - **filter**:
-    - ```php 
+    -   ```php
         /*
             Use a callable function to filter through items.
             The signature of the callable must be: `function ($value, $key)`
         */
         $books = $dot->get('books.{childre\'s books}')->filter(function ($value, $key) {
-           return $value['name'] === 'Harry Potter and the Order of the Phoenix';
+            return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
         
         $books->toArray();
-      ```
+        ```
 
 - **where**:
-    - ```php
+    -   ```php
         /*
             Allowed Operations:
                 =, == ===, !=, !==, <, >, <=, >=,
@@ -161,9 +161,9 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         $books = $dot->get('books.{childre\'s books}')->where(function ($value, $key) {
             return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
-      ```
+        ```
 
-#### Data Sample:
+### Data Sample:
 
 ```php
 $dummyArray = [
