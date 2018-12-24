@@ -40,8 +40,8 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 ## Usage
 
 
-####### REMEMBER: YOU NEED TO KNOW YOUR DATA!
-####### DotArray::get() can return a new instance of DotArray in case the accessed path is an array or it will return the raw data value or the default given value.
+>#### REMEMBER: YOU NEED TO KNOW YOUR DATA!
+>#### DotArray::get() can return a new instance of DotArray in case the accessed path is an array or it will return the raw data value or the default given value.
 
 - **instantiation**:
     - ```php
