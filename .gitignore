@@ -1,0 +1,43 @@
+# --------------------------------------------
+# Composer & Vendor Directory.
+# --------------------------------------------
+composer.phar
+/vendor
+/composer.lock
+
+
+# --------------------------------------------
+# PHPUnit & Config.
+# --------------------------------------------
+phpunit.phar
+/phpunit.xml
+.phpunit.result.cache
+/build
+
+
+# --------------------------------------------
+# Local PHP Code Sniffer Config.
+# --------------------------------------------
+/phpcs.xml
+
+
+# --------------------------------------------
+# IDE Files.
+# --------------------------------------------
+# PhpStorm.
+.idea
+
+# NetBeans.
+nbproject
+
+# Zend Studio
+.buildpath
+.project
+.settings
+
+
+# --------------------------------------------
+# OS files.
+# --------------------------------------------
+Thumbs.db
+.DS_Store
