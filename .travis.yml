@@ -8,9 +8,6 @@ matrix:
         - php: hhvm
 
     include:
-        - php: 5.5
-        - php: 5.6
-        - php: 7.0
         - php: 7.1
         - php: 7.2
         - php: 7.3
@@ -23,6 +20,8 @@ before_script:
 
 script:
     - php vendor/bin/phpcs
-    - php vendor/bin/phpunit --debug
+    - php vendor/bin/phpunit --coverage-clover=coverage.xml --debug
+    - php vendor/bin/phpunit --configuration ./build/travis-ci-fail.xml > /dev/null; if [ $? -eq 0 ]; then echo "SHOULD FAIL"; false; else echo "fail checked"; fi;
 
 after_script:
+    - bash <(curl -s https://codecov.io/bash)

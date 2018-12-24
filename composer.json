@@ -1,6 +1,6 @@
 {
     "name": "binary-cube/dot-array",
-    "description": "Navigate through array using JSON Dot path.",
+    "description": "Navigate through array using JSON Dot notation path.",
 
     "keywords": [
         "DotArray", "dot-array", "array", "dot", "php-array", "php-array-json-path"
@@ -24,14 +24,14 @@
     "prefer-stable": true,
 
     "require": {
-        "php": ">=5.5",
+        "php": ">=7.1",
         "ext-json": "*",
         "ext-mbstring": "*"
     },
 
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "~7.0"
     },
 
     "suggest": {

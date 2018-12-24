@@ -32,7 +32,7 @@
         <log type="junit"   target="build/phpunit/report.junit.xml"/>
 
         <log type="coverage-html"   target="build/phpunit/coverage/html"/>
-        <log type="coverage-text"   target="build/phpunit/coverage/txt"/>
-        <log type="coverage-clover" target="build/phpunit/coverage/xml"/>
+        <log type="coverage-text"   target="build/phpunit/coverage/coverage.txt"/>
+        <log type="coverage-clover" target="build/phpunit/coverage/coverage.xml"/>
     </logging>
 </phpunit>

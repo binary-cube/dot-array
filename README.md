@@ -1,6 +1,6 @@
 # DotArray
 
-Compatible with `PHP >=5.5`
+Require `PHP >=7.1`
 
 Accessing PHP Arrays via DOT notation is easy as:
 
@@ -9,8 +9,8 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 ```
 [![Latest Stable Version](https://poser.pugx.org/binary-cube/dot-array/version)](https://packagist.org/packages/binary-cube/dot-array)
 [![Total Downloads](https://poser.pugx.org/binary-cube/dot-array/downloads)](https://packagist.org/packages/binary-cube/dot-array)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/003187f2016e4c4cb1b014ccc9bdb5c0)](https://www.codacy.com/app/microThread/dot-array?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=binary-cube/dot-array&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://scrutinizer-ci.com/g/binary-cube/dot-array/badges/build.png?b=master)](https://scrutinizer-ci.com/g/binary-cube/dot-array/build-status/master)
+[![Build Status](https://travis-ci.org/binary-cube/dot-array.svg?branch=master)](https://travis-ci.org/binary-cube/dot-array)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/003187f2016e4c4cb1b014ccc9bdb5c0)](https://www.codacy.com/app/microThread/dot-array)
 [![Code Coverage](https://scrutinizer-ci.com/g/binary-cube/dot-array/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/binary-cube/dot-array/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/binary-cube/dot-array/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/binary-cube/dot-array/?branch=master)
 [![License](https://poser.pugx.org/binary-cube/dot-array/license)](LICENSE)
@@ -22,7 +22,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 - **via "composer require"**:
 
     ``` shell
-        composer require binary-cube/dot-array
+    composer require binary-cube/dot-array
     ```
 
 - **via composer (manually)**:
