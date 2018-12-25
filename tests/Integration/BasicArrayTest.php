@@ -64,25 +64,30 @@ class BasicArrayTest extends TestCase
 
         $dot['a'] = [
             'b' => [
-                'c' => 1,
+                'c' => 3,
             ],
         ];
 
-        $dot['a']['b']['d'] = 2;
+        $dot['a']['b']['b'] = 2;
 
         $dot->set('mixed_array.{new-key}', []);
         $dot->set('mixed_array.{👋.🤘.some-key}', []);
+        $dot->set('a.b.a', 1);
 
         self::assertIsArray($dot->get('mixed_array.{new-key}')->toArray());
         self::assertEmpty($dot->get('mixed_array.{👋.🤘.some-key}')->toArray());
+
+        self::assertIsInt($dot->get('a.b.a'));
+        self::assertIsInt($dot['a']['b']['a']);
+        self::assertIsInt($dot['a.b.a']);
 
         self::assertIsInt($dot->get('a.b.c'));
         self::assertIsInt($dot['a']['b']['c']);
         self::assertIsInt($dot['a.b.c']);
 
-        self::assertIsInt($dot->get('a.b.d'));
-        self::assertIsInt($dot['a']['b']['d']);
-        self::assertIsInt($dot['a.b.d']);
+        self::assertIsInt($dot->get('a.b.b'));
+        self::assertIsInt($dot['a']['b']['b']);
+        self::assertIsInt($dot['a.b.b']);
     }
 
 
@@ -128,9 +133,9 @@ class BasicArrayTest extends TestCase
         self::assertIsBool($dot->isEmpty('mixed_array'));
         self::assertIsBool($dot->isEmpty('a'));
 
-        self::assertTrue($dot->isEmpty('empty_array.0'));
-        self::assertTrue($dot->isEmpty('a'));
         self::assertNotTrue($dot->isEmpty('mixed_array'));
+        self::assertTrue($dot->isEmpty('a'));
+        self::assertTrue($dot->isEmpty('empty_array.0'));
 
         self::assertNotTrue(empty($dot['mixed_array']));
         self::assertTrue(empty($dot['a']));
@@ -293,7 +298,7 @@ class BasicArrayTest extends TestCase
         $dot  = DotArray::create($data);
 
         $admin = $dot->get('mixed_array.users')->find(
-            function ($value, $key) {
+            function ($value) {
                 return (
                     array_key_exists('is_admin', $value)
                     && $value['is_admin'] === true
@@ -334,6 +339,60 @@ class BasicArrayTest extends TestCase
 
 
     /**
+     * Testing the FilterBy Method.
+     *
+     * @return void
+     */
+    public function testFilterBy()
+    {
+        $data = ArrayDataProvider::get();
+        $dot  = DotArray::create($data);
+
+        $user1 = [
+            [
+                'id' => 1,
+                'name' => 'User 1',
+            ],
+        ];
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', '=', '1')->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', '===', 1)->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', '<', 2)->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', '<=', 1)->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', 'in', [1])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', 'between', 0, 1)->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->filterBy('id', 'not-between', 2, PHP_INT_MAX)->toArray()
+        );
+    }
+
+
+    /**
      * Testing the Where Method.
      *
      * @return void
@@ -343,21 +402,46 @@ class BasicArrayTest extends TestCase
         $data = ArrayDataProvider::get();
         $dot  = DotArray::create($data);
 
-        $users = $dot->get('mixed_array.users')->where(['in', 'id', [3, 4]]);
+        $user1 = [
+            [
+                'id' => 1,
+                'name' => 'User 1',
+            ],
+        ];
 
         self::assertSame(
-            [
-                [
-                    'id' => 3,
-                    'name' => 'User 3',
-                ],
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', '=', 1])->toArray()
+        );
 
-                [
-                    'id' => 4,
-                    'name' => 'User 4',
-                ],
-            ],
-            $users->toArray()
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', '===', 1])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', '<', 2])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', '<=', 1])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', 'in', [1]])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', 'between', 0, 1])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $dot->get('mixed_array.users')->where(['id', 'not-between', 2, PHP_INT_MAX])->toArray()
         );
 
         $users = (
@@ -365,24 +449,14 @@ class BasicArrayTest extends TestCase
                 ->get('mixed_array')
                 ->get('users')
                 ->where(
-                    function ($value, $key) {
-                                return ($value['id'] === 3 || $value['id'] === 4);
+                    function ($value) {
+                        return ($value['id'] === 1);
                     }
                 )
         );
 
         self::assertSame(
-            [
-                [
-                    'id' => 3,
-                    'name' => 'User 3',
-                ],
-
-                [
-                    'id' => 4,
-                    'name' => 'User 4',
-                ],
-            ],
+            $user1,
             $users->toArray()
         );
     }

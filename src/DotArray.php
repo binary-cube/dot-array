@@ -3,7 +3,7 @@
 namespace BinaryCube\DotArray;
 
 /**
- * DotArray - PHP
+ * DotArray
  *
  * @package BinaryCube\DotArray
  * @author  Banciu N. Cristian Mihai <banciu.n.cristian.mihai@gmail.com>
@@ -110,6 +110,101 @@ class DotArray implements
         }
 
         return (array) $items;
+    }
+
+
+    /**
+     * List with internal operators and the associated callbacks.
+     *
+     * @return array
+     */
+    protected static function operators()
+    {
+        return [
+            [
+                'tokens' => ['=', '==', 'eq'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] == $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['===', 'i'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] === $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['!=', 'ne'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] != $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['!==', 'ni'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] !== $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['<', 'lt'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] < $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['>', 'gt'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] > $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['<=', 'lte'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] <= $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['>=', 'gte'],
+                'closure' => function ($item, $property, $value) {
+                    return $item[$property] >= $value[0];
+                },
+            ],
+
+            [
+                'tokens' => ['in', 'contains'],
+                'closure' => function ($item, $property, $value) {
+                    return \in_array($item[$property], (array) $value, true);
+                },
+            ],
+
+            [
+                'tokens' => ['not-in', 'not-contains'],
+                'closure' => function ($item, $property, $value) {
+                    return !\in_array($item[$property], (array) $value, true);
+                },
+            ],
+
+            [
+                'tokens' => ['between'],
+                'closure' => function ($item, $property, $value) {
+                    return ($item[$property] >= $value[0] && $item[$property] <= $value[1]);
+                },
+            ],
+
+            [
+                'tokens' => ['not-between'],
+                'closure' => function ($item, $property, $value) {
+                    return ($item[$property] < $value[0] || $item[$property] > $value[1]);
+                },
+            ],
+        ];
     }
 
 
@@ -583,17 +678,78 @@ class DotArray implements
 
 
     /**
+     * Allow to filter an array using one of the following comparison operators:
+     *  - [ =, ==, eq (equal) ]
+     *  - [ ===, i (identical) ]
+     *  - [ !=, ne (not equal) ]
+     *  - [ !==, ni (not identical) ]
+     *  - [ <, lt (less than) ]
+     *  - [ >, gr (greater than) ]
+     *  - [ <=, lte (less than or equal to) ]
+     *  - [ =>, gte (greater than or equal to) ]
+     *  - [ in, contains ]
+     *  - [ not-in, not-contains ]
+     *  - [ between ]
+     *  - [ not-between ]
+     *
+     * @param string $property
+     * @param string $comparisonOperator
+     * @param mixed  $value
+     *
+     * @return static
+     */
+    public function filterBy($property, $comparisonOperator, $value)
+    {
+        $args  = \func_get_args();
+        $value = (array) (array_slice($args, 2, count($args)));
+
+        $closure   = null;
+        $operators = static::operators();
+
+        if (isset($value[0]) && \is_array($value[0])) {
+            $value = $value[0];
+        }
+
+        foreach ($operators as $entry) {
+            if (\in_array($comparisonOperator, $entry['tokens'])) {
+                $closure = function ($item) use ($entry, $property, $value) {
+                    $item = (array) $item;
+
+                    if (!array_key_exists($property, $item)) {
+                        return false;
+                    }
+
+                    return $entry['closure']($item, $property, $value);
+                };
+
+                break;
+            }
+        }
+
+        return $this->filter($closure);
+    }
+
+
+    /**
      * Filtering through array.
      * The signature of the call can be:
-     * - where([operation, property, ...value])
-     * - where(\Closure)
-     * - where(\Closure)
+     * - where([property, comparisonOperator, ...value])
+     * - where(\Closure) :: The signature of the callable must be: `function ($value, $key)`
+     * - where([\Closure]) :: The signature of the callable must be: `function ($value, $key)`
      *
-     * Allowed operations:
-     *   [
-     *      =, == ===, !=, !==, <, >, <=, >=,
-     *      in, not-in, between, not-between, eq, ne, lt, gt, lte, gte, contains, not-contains
-     *   ]
+     * Allowed comparison operators:
+     *  - [ =, ==, eq (equal) ]
+     *  - [ ===, i (identical) ]
+     *  - [ !=, ne (not equal) ]
+     *  - [ !==, ni (not identical) ]
+     *  - [ <, lt (less than) ]
+     *  - [ >, gr (greater than) ]
+     *  - [ <=, lte (less than or equal to) ]
+     *  - [ =>, gte (greater than or equal to) ]
+     *  - [ in, contains ]
+     *  - [ not-in, not-contains ]
+     *  - [ between ]
+     *  - [ not-between ]
      *
      * @param array|callable $criteria
      *
@@ -601,138 +757,27 @@ class DotArray implements
      */
     public function where($criteria)
     {
-        $closure = null;
+        $criteria = (array) $criteria;
 
-        if (($criteria instanceof \Closure)) {
-            $closure = $criteria;
-        } else if (
-            \is_array($criteria) &&
-            !empty($criteria)
-        ) {
-            $closure = \array_shift($criteria);
-
-            if (!($closure instanceof \Closure)) {
-                $operation = empty($closure) ? 'eq' : $closure;
-                $property  = \array_shift($criteria);
-                $value     = (array) $criteria;
-
-                if (\is_array($value[0])) {
-                    $value = $value[0];
-                }
-
-                $filters = [
-                    [
-                        'tokens' => ['=', '=='],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] == $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['===', 'eq'],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] === $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['!='],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] != $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['!==', 'ne'],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] !== $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['<', 'lt'],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] < $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['>', 'gt'],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] > $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['<=', 'lte'],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] <= $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['>=', 'gte'],
-                        'closure' => function ($item, $property, $value) {
-                            return $item[$property] >= $value[0];
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['in', 'contains'],
-                        'closure' => function ($item, $property, $value) {
-                            return \in_array($item[$property], (array) $value, true);
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['not-in', 'not-contains'],
-                        'closure' => function ($item, $property, $value) {
-                            return !\in_array($item[$property], (array) $value, true);
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['between'],
-                        'closure' => function ($item, $property, $value) {
-                            return ($item[$property] >= $value[0] && $item[$property] <= $value[1]);
-                        },
-                    ],
-
-                    [
-                        'tokens' => ['not-between'],
-                        'closure' => function ($item, $property, $value) {
-                            return ($item[$property] < $value[0] || $item[$property] > $value[1]);
-                        },
-                    ],
-                ];
-
-                foreach ($filters as $filter) {
-                    // Search for operation.
-                    if (\in_array($operation, $filter['tokens'])) {
-                        $closure = function ($item) use ($filter, $property, $value) {
-                            $item = (array) $item;
-
-                            if (!array_key_exists($property, $item)) {
-                                return false;
-                            }
-
-                            return $filter['closure']($item, $property, $value);
-                        };
-
-                        break;
-                    }//end if
-                }//end foreach
-            }//end if
-        }//end if
-
-        // Dummy closure if nothing is provided.
-        if (empty($closure)) {
-            $closure = function () {
-                return true;
-            };
+        if (empty($criteria)) {
+            return $this->filter();
         }
 
-        return $this->filter($closure, ARRAY_FILTER_USE_BOTH);
+        $closure = \array_shift($criteria);
+
+        if ($closure instanceof \Closure) {
+            return $this->filter($closure);
+        }
+
+        $property           = $closure;
+        $comparisonOperator = \array_shift($criteria);
+        $value              = $criteria;
+
+        if (isset($value[0]) && \is_array($value[0])) {
+            $value = $value[0];
+        }
+
+        return $this->filterBy($property, $comparisonOperator, $value);
     }
 
 

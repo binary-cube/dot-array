@@ -1,6 +1,6 @@
 # DotArray
 
-Require `PHP >=7.1`
+[![Require `PHP >= 7.1`](https://img.shields.io/badge/Require%20PHP-%3E%3D%207.1-brightgreen.svg)](https://github.com/binary-cube/dot-array)
 
 Accessing PHP Arrays via DOT notation is easy as:
 
@@ -65,6 +65,9 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         // Accessing the last leaf and getting the raw data.
         $dot('books.{sci-fi & fantasy}.0.name');
         $dot->get('books.{sci-fi & fantasy}.0.name');
+
+        // Giving a default value in case the requested key is not found.
+        $dot->get('key.not.exist', 'not-found-as-string');
         
         // Vanilla PHP.
         $dot('books.{sci-fi & fantasy}.0.name');
@@ -137,27 +140,66 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         
         $books->toArray();
         ```
+        
+- **filterBy**:
+    -   ```php
+        /*
+            Allowed comparison operators:
+                - [ =, ==, eq (equal) ]
+                - [ ===, i (identical) ]
+                - [ !=, ne (not equal) ]
+                - [ !==, ni (not identical) ]
+                - [ <, lt (less than) ]
+                - [ >, gr (greater than) ]
+                - [ <=, lte (less than or equal to) ]
+                - [ =>, gte (greater than or equal to) ]
+                - [ in, contains ]
+                - [ not-in, not-contains ]
+                - [ between ]
+                - [ not-between ]
+        */
+        // Example 1.
+        $books = $dot->get('books.{childre\'s books}')->filterBy('price', 'between', 5, 12);
+
+        // Example 2.
+        $books = $dot->get('books.{childre\'s books}')->filterBy('price', '>', 10);
+
+        // Example 3.
+        $books = $dot->get('books.{childre\'s books}')->filterBy('price', 'in', [8.5, 15.49]);
+        ```
 
 - **where**:
     -   ```php
         /*
-            Allowed Operations:
-                =, == ===, !=, !==, <, >, <=, >=,
-                in, not-in, between, not-between, eq, ne, lt, gt, lte, gte, contains, not-contains
+            The signature of the `where` call can be:
+                - where([property, comparisonOperator, ...value])
+                - where(\Closure) :: The signature of the callable must be: `function ($value, $key)`
+
+            Allowed comparison operators:
+                - [ =, ==, eq (equal) ]
+                - [ ===, i (identical) ]
+                - [ !=, ne (not equal) ]
+                - [ !==, ni (not identical) ]
+                - [ <, lt (less than) ]
+                - [ >, gr (greater than) ]
+                - [ <=, lte (less than or equal to) ]
+                - [ =>, gte (greater than or equal to) ]
+                - [ in, contains ]
+                - [ not-in, not-contains ]
+                - [ between ]
+                - [ not-between ]
         */
         
-        // Example 1.
-        $books = $dot->get('books.{childre\'s books}')->where(['between', 'price', 5, 12]);
+        // Example 1. (using the signature: [property, comparisonOperator, ...value])
+        $books = $dot->get('books.{childre\'s books}')->where(['price', 'between', 5, 12]);
 
-        $books->toArray();
+        // Example 2. (using the signature: [property, comparisonOperator, ...value])
+        $books = $dot->get('books.{childre\'s books}')->where(['price', '>', 10]);
         
-        // Example 2.
-        $books = $dot->get('books.{childre\'s books}')->where(['>', 'price', 10]);
+        // Example 3. (using the signature: [property, comparisonOperator, ...value])
+        $books = $dot->get('books.{childre\'s books}')->where(['price', 'in', [8.5, 15.49]]);
         
-        // Example 3.
-        $books = $dot->get('books.{childre\'s books}')->where(['in', 'price', [8.5, 15.49]]);
-        
-        // Example 4.
+        // Example 4. (using the signature: \Closure)
         $books = $dot->get('books.{childre\'s books}')->where(function ($value, $key) {
             return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
