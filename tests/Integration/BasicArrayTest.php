@@ -8,6 +8,8 @@ use BinaryCube\DotArray\Tests\TestCase;
 /**
  * BasicArrayTest
  *
+ * @coversDefaultClass \BinaryCube\DotArray\DotArray
+ *
  * @package BinaryCube\DotArray\Tests
  * @author  Banciu N. Cristian Mihai <banciu.n.cristian.mihai@gmail.com>
  * @license https://github.com/binary-cube/dot-array/blob/master/LICENSE <MIT License>
@@ -16,187 +18,257 @@ use BinaryCube\DotArray\Tests\TestCase;
 class BasicArrayTest extends TestCase
 {
 
+    /**
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * @var array
+     */
+    protected $jsonArray;
+
+    /**
+     * @var string
+     */
+    protected $jsonString;
+
+    /**
+     * @var DotArray
+     */
+    protected $dot;
+
+
+    /**
+     * Setup the test env.
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        $this->data       = ArrayDataProvider::get();
+        $this->jsonArray  = [
+            'a' => [
+                'b' => [
+                    'c' => [
+                        'v1.0' => 1.3,
+                    ],
+                ],
+            ],
+        ];
+        $this->jsonString = '{"a":{"b":{"c":{"v1.0":1.3}}}}';
+        $this->dot        = new DotArray($this->data);
+
+        parent::setUp();
+    }
+
 
     /**
      * Testing the Get Method.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::get
+     * @covers \BinaryCube\DotArray\DotArray::toArray
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
      *
      * @return void
      */
     public function testGet()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
+        $dot = $this->dot;
 
-        self::assertIsArray($dot->get()->toArray());
-        self::assertIsArray($dot->get('empty_array')->toArray());
+        self::assertIsArray($dot()->toArray());
 
-        self::assertIsArray($dot->get('indexed_array')->toArray());
-        self::assertIsArray($dot->get('indexed_array.0')->toArray());
+        self::assertIsArray($this->dot->get()->toArray());
+        self::assertIsArray($this->dot->get('empty_array')->toArray());
 
-        self::assertIsArray($dot->get('assoc_array')->toArray());
-        self::assertIsArray($dot->get('assoc_array.two')->toArray());
+        self::assertIsArray($this->dot->get('indexed_array')->toArray());
+        self::assertIsArray($this->dot->get('indexed_array.0')->toArray());
 
-        self::assertIsArray($dot->get('mixed_array')->toArray());
-        self::assertIsArray($dot->get('mixed_array.{👋.🤘.some-key}')->toArray());
-        self::assertIsArray($dot->get('mixed_array.{👋.🤘.some-key}.config.elastic-search.{v6.0}')->toArray());
-        self::assertIsArray($dot->get('mixed_array.hello-world')->toArray());
+        self::assertIsArray($this->dot->get('assoc_array')->toArray());
+        self::assertIsArray($this->dot->get('assoc_array.two')->toArray());
 
-        self::assertIsArray($dot['mixed_array']);
-        self::assertIsArray($dot['mixed_array.{👋.🤘.some-key}']);
+        self::assertIsArray($this->dot->get('mixed_array')->toArray());
+        self::assertIsArray($this->dot->get('mixed_array.{👋.🤘.some-key}')->toArray());
+        self::assertIsArray($this->dot->get('mixed_array.{👋.🤘.some-key}.config.elastic-search.{v6.0}')->toArray());
+        self::assertIsArray($this->dot->get('mixed_array.hello-world')->toArray());
 
-        self::assertIsString($dot->get('mixed_array.hello-world.Romanian'));
-        self::assertIsString($dot->get('mixed_array.hello-world.Nǐ hǎo'));
-        self::assertIsString($dot->get('mixed_array.hello-world.{Nǐ hǎo}'));
+        self::assertIsArray($this->dot['mixed_array']);
+        self::assertIsArray($this->dot['mixed_array.{👋.🤘.some-key}']);
 
-        self::assertIsString($dot['mixed_array.hello-world.{Nǐ hǎo}']);
+        self::assertIsString($this->dot->get('mixed_array.hello-world.Romanian'));
+        self::assertIsString($this->dot->get('mixed_array.hello-world.Nǐ hǎo'));
+        self::assertIsString($this->dot->get('mixed_array.hello-world.{Nǐ hǎo}'));
+
+        self::assertIsString($this->dot['mixed_array.hello-world.{Nǐ hǎo}']);
     }
 
 
     /**
      * Testing the Set Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::set
+     * @covers \BinaryCube\DotArray\DotArray::toArray
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testSet()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
-
-        $dot['a'] = [
+        $this->dot['a'] = [
             'b' => [
                 'c' => 3,
             ],
         ];
 
-        $dot['a']['b']['b'] = 2;
+        $this->dot['a']['b']['b'] = 2;
 
-        $dot->set('mixed_array.{new-key}', []);
-        $dot->set('mixed_array.{👋.🤘.some-key}', []);
-        $dot->set('a.b.a', 1);
+        $this->dot->set('mixed_array.{new-key}', []);
+        $this->dot->set('mixed_array.{👋.🤘.some-key}', []);
+        $this->dot->set('a.b.a', 1);
+        $this->dot->set('new1.new2', 1);
 
-        self::assertIsArray($dot->get('mixed_array.{new-key}')->toArray());
-        self::assertEmpty($dot->get('mixed_array.{👋.🤘.some-key}')->toArray());
+        self::assertIsArray($this->dot->get('mixed_array.{new-key}')->toArray());
+        self::assertEmpty($this->dot->get('mixed_array.{👋.🤘.some-key}')->toArray());
 
-        self::assertIsInt($dot->get('a.b.a'));
-        self::assertIsInt($dot['a']['b']['a']);
-        self::assertIsInt($dot['a.b.a']);
+        self::assertIsInt($this->dot->get('a.b.a'));
+        self::assertIsInt($this->dot['a']['b']['a']);
+        self::assertIsInt($this->dot['a.b.a']);
 
-        self::assertIsInt($dot->get('a.b.c'));
-        self::assertIsInt($dot['a']['b']['c']);
-        self::assertIsInt($dot['a.b.c']);
+        self::assertIsInt($this->dot->get('a.b.c'));
+        self::assertIsInt($this->dot['a']['b']['c']);
+        self::assertIsInt($this->dot['a.b.c']);
 
-        self::assertIsInt($dot->get('a.b.b'));
-        self::assertIsInt($dot['a']['b']['b']);
-        self::assertIsInt($dot['a.b.b']);
+        self::assertIsInt($this->dot->get('a.b.b'));
+        self::assertIsInt($this->dot['a']['b']['b']);
+        self::assertIsInt($this->dot['a.b.b']);
+
+        self::assertIsInt($this->dot->get('new1.new2'));
+        self::assertIsInt($this->dot['new1']['new2']);
+        self::assertIsInt($this->dot['new1.new2']);
     }
 
 
     /**
      * Testing the Has Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::has
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testHas()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
-
-        $dot['a'] = [
+        $this->dot['a'] = [
             'b' => [
                 'c' => 1,
             ],
         ];
 
-        self::assertTrue($dot->has(''));
-        self::assertTrue($dot->has(null));
-        self::assertTrue($dot->has('mixed_array.{👋.🤘.some-key}'));
-        self::assertTrue($dot->has('a'));
-        self::assertTrue($dot->has('a.b'));
-        self::assertTrue($dot->has('a.b.c'));
-        self::assertTrue($dot->has('indexed_array.0'));
-        self::assertNotTrue($dot->has('indexed_array.10'));
-        self::assertNotTrue($dot->has('mixed_array.{imagine dragons}'));
-        self::assertNotTrue($dot->has('a.b.c.d'));
+        self::assertTrue($this->dot->has(''));
+        self::assertTrue($this->dot->has(null));
+        self::assertTrue($this->dot->has('mixed_array.{👋.🤘.some-key}'));
+        self::assertTrue($this->dot->has('a'));
+        self::assertTrue($this->dot->has('a.b'));
+        self::assertTrue($this->dot->has('a.b.c'));
+        self::assertTrue($this->dot->has('indexed_array.0'));
+        self::assertNotTrue($this->dot->has('indexed_array.10'));
+        self::assertNotTrue($this->dot->has('mixed_array.{imagine dragons}'));
+        self::assertNotTrue($this->dot->has('a.b.c.d'));
     }
 
 
     /**
      * Testing the isEmpty Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::isEmpty
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testIsEmpty()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
+        self::assertIsBool($this->dot->isEmpty());
+        self::assertIsBool($this->dot->isEmpty(null));
+        self::assertIsBool($this->dot->isEmpty('mixed_array'));
+        self::assertIsBool($this->dot->isEmpty('a'));
 
-        self::assertIsBool($dot->isEmpty('mixed_array'));
-        self::assertIsBool($dot->isEmpty('a'));
+        self::assertNotTrue($this->dot->isEmpty('mixed_array'));
+        self::assertTrue($this->dot->isEmpty('a'));
+        self::assertTrue($this->dot->isEmpty('empty_array.0'));
 
-        self::assertNotTrue($dot->isEmpty('mixed_array'));
-        self::assertTrue($dot->isEmpty('a'));
-        self::assertTrue($dot->isEmpty('empty_array.0'));
+        self::assertNotTrue(empty($this->dot['mixed_array']));
+        self::assertTrue(empty($this->dot['a']));
 
-        self::assertNotTrue(empty($dot['mixed_array']));
-        self::assertTrue(empty($dot['a']));
+        $this->dot->set('dotObject', DotArray::create([]));
+
+        self::assertIsBool($this->dot->isEmpty('dotObject'));
+        self::assertIsBool($this->dot->get('dotObject')->isEmpty());
     }
 
 
     /**
      * Testing the Delete Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::delete
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testDelete()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
+        $this->dot->delete('mixed_array.{👋.🤘.some-key}');
 
-        $dot->delete('mixed_array.{👋.🤘.some-key}');
+        unset($this->dot['empty_array']);
+        unset($this->dot['mixed_array.hello-world']);
+        unset($this->dot['assoc_array.two']);
+        unset($this->dot['assoc_array.no.key']);
 
-        unset($dot['mixed_array.hello-world']);
-        unset($dot['assoc_array.two']);
+        self::assertArrayNotHasKey('👋.🤘.some-key', $this->dot->get('mixed_array')->toArray());
+        self::assertArrayNotHasKey('hello-world', $this->dot->get('mixed_array')->toArray());
+        self::assertArrayNotHasKey('two', $this->dot->get('assoc_array')->toArray());
 
-        self::assertArrayNotHasKey('👋.🤘.some-key', $dot->get('mixed_array')->toArray());
-        self::assertArrayNotHasKey('hello-world', $dot->get('mixed_array')->toArray());
-        self::assertArrayNotHasKey('two', $dot->get('assoc_array')->toArray());
+        self::assertArrayNotHasKey('👋.🤘.some-key', $this->dot['mixed_array']);
+        self::assertArrayNotHasKey('hello-world', $this->dot['mixed_array']);
+        self::assertArrayNotHasKey('two', $this->dot['assoc_array']);
 
-        self::assertArrayNotHasKey('👋.🤘.some-key', $dot['mixed_array']);
-        self::assertArrayNotHasKey('hello-world', $dot['mixed_array']);
-        self::assertArrayNotHasKey('two', $dot['assoc_array']);
+        self::assertNotTrue(array_key_exists('👋.🤘.some-key', $this->dot['mixed_array']));
+        self::assertNotTrue(array_key_exists('hello-world', $this->dot['mixed_array']));
+        self::assertNotTrue(array_key_exists('two', $this->dot['assoc_array']));
 
-        self::assertNotTrue(array_key_exists('👋.🤘.some-key', $dot['mixed_array']));
-        self::assertNotTrue(array_key_exists('hello-world', $dot['mixed_array']));
-        self::assertNotTrue(array_key_exists('two', $dot['assoc_array']));
-
-        self::assertTrue(array_key_exists('one', $dot->get('assoc_array')->toArray()));
-        self::assertTrue(array_key_exists('one', $dot['assoc_array']));
+        self::assertTrue(array_key_exists('one', $this->dot->get('assoc_array')->toArray()));
+        self::assertTrue(array_key_exists('one', $this->dot['assoc_array']));
     }
 
 
     /**
      * Testing the Clear Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::clear
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testClear()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
+        $this->dot->clear('assoc_array.two');
+        $this->dot->clear(['assoc_array.one', 'assoc_array.three']);
 
-        $dot->clear('assoc_array.two');
-        $dot->clear(['assoc_array.one', 'assoc_array.three']);
+        $users = $this->dot->get('mixed_array.users')->clear();
 
-        $users = $dot->get('mixed_array.users')->clear();
-
-        self::assertIsArray($dot->get('assoc_array.one')->toArray());
-        self::assertIsArray($dot->get('assoc_array.two')->toArray());
-        self::assertIsArray($dot->get('assoc_array.three')->toArray());
+        self::assertIsArray($this->dot->get('assoc_array.one')->toArray());
+        self::assertIsArray($this->dot->get('assoc_array.two')->toArray());
+        self::assertIsArray($this->dot->get('assoc_array.three')->toArray());
         self::assertIsArray($users->toArray());
 
-        self::assertEmpty($dot->get('assoc_array.one')->toArray());
-        self::assertEmpty($dot->get('assoc_array.two')->toArray());
-        self::assertEmpty($dot->get('assoc_array.three')->toArray());
+        self::assertEmpty($this->dot->get('assoc_array.one')->toArray());
+        self::assertEmpty($this->dot->get('assoc_array.two')->toArray());
+        self::assertEmpty($this->dot->get('assoc_array.three')->toArray());
         self::assertEmpty($users->toArray());
     }
 
@@ -204,13 +276,14 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Merge Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::merge
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testMerge()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
-
         $extraData = [
             'assoc_array' => [
                 'one' => [
@@ -259,45 +332,47 @@ class BasicArrayTest extends TestCase
             ]
         ];
 
-        $dot->merge($extraData);
-        self::assertIsArray($dot->get('{new-entry}.a')->toArray());
-        self::assertEquals('new value for assoc_array.one.element_1', $dot->get('assoc_array.one.element_1'));
-        self::assertEquals(['.other.config' => ['port' => 9300]], $dot->get('mixed_array.{👋.🤘.some-key}.config.{elastic-search}.{v6.0}')->toArray());
-        self::assertCount(3, $dot->get('mixed_array.{👋.🤘.some-key}.config.memcached.servers'));
+        $this->dot->merge($extraData);
+        self::assertIsArray($this->dot->get('{new-entry}.a')->toArray());
+        self::assertEquals('new value for assoc_array.one.element_1', $this->dot->get('assoc_array.one.element_1'));
+        self::assertEquals(['.other.config' => ['port' => 9300]], $this->dot->get('mixed_array.{👋.🤘.some-key}.config.{elastic-search}.{v6.0}')->toArray());
+        self::assertCount(3, $this->dot->get('mixed_array.{👋.🤘.some-key}.config.memcached.servers'));
     }
 
 
     /**
      * Testing the Count Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::count
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testCount()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
+        self::assertCount(2, $this->dot->get('mixed_array.{👋.🤘.some-key}.config.memcached.servers'));
+        self::assertCount(0, $this->dot->get('empty_array.0'));
+        self::assertCount(4, $this->dot->get('indexed_array'));
+        self::assertCount(7, $this->dot['indexed_array'][0]);
 
-        self::assertCount(2, $dot->get('mixed_array.{👋.🤘.some-key}.config.memcached.servers'));
-        self::assertCount(0, $dot->get('empty_array.0'));
-        self::assertCount(4, $dot->get('indexed_array'));
-        self::assertCount(7, $dot['indexed_array'][0]);
-
-        self::assertEquals(7, count($dot['indexed_array'][0]));
-        self::assertEquals(1, count($dot['assoc_array']['three']));
+        self::assertEquals(7, count($this->dot['indexed_array'][0]));
+        self::assertEquals(1, count($this->dot['assoc_array']['three']));
     }
 
 
     /**
      * Testing the Find Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::find
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testFind()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
-
-        $admin = $dot->get('mixed_array.users')->find(
+        $admin = $this->dot->get('mixed_array.users')->find(
             function ($value) {
                 return (
                     array_key_exists('is_admin', $value)
@@ -315,11 +390,22 @@ class BasicArrayTest extends TestCase
             ],
             $admin->toArray()
         );
+
+        self::assertFalse(
+            $this->dot->find(
+                function () {
+                }
+            )
+        );
     }
 
 
     /**
      * Testing the Filter Method.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::filter
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
      *
      * @return void
      */
@@ -341,13 +427,14 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the FilterBy Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::filterBy
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testFilterBy()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
-
         $user1 = [
             [
                 'id' => 1,
@@ -357,37 +444,92 @@ class BasicArrayTest extends TestCase
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', '=', '1')->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', '=', '1')->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', '===', 1)->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', '===', 1)->toArray()
+        );
+
+        self::assertSame(
+            $this->dot->get('mixed_array.users')->filter(
+                function ($value) {
+                    return $value['id'] !== 1;
+                }
+            )->toArray(),
+            $this->dot->get('mixed_array.users')->filterBy('id', '!=', 1)->toArray()
+        );
+
+        self::assertSame(
+            $this->dot->get('mixed_array.users')->filter(
+                function ($value) {
+                    return $value['id'] !== 1;
+                }
+            )->toArray(),
+            $this->dot->get('mixed_array.users')->filterBy('id', '!==', 1)->toArray()
+        );
+
+        self::assertSame(
+            $this->dot->get('mixed_array.users')->filter(
+                function ($value) {
+                    return $value['id'] !== 1;
+                }
+            )->toArray(),
+            $this->dot->get('mixed_array.users')->filterBy('id', '>', 1)->toArray()
+        );
+
+        self::assertSame(
+            $this->dot->get('mixed_array.users')->filter(
+                function ($value) {
+                    return $value['id'] >= 1;
+                }
+            )->toArray(),
+            $this->dot->get('mixed_array.users')->filterBy('id', '>=', 1)->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', '<', 2)->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', '<', 2)->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', '<=', 1)->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', '<=', 1)->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', 'in', [1])->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', 'in', [1])->toArray()
+        );
+
+        self::assertSame(
+            $this->dot->get('mixed_array.users')->filter(
+                function ($value) {
+                    return $value['id'] !== 1;
+                }
+            )->toArray(),
+            $this->dot->get('mixed_array.users')->filterBy('id', 'not-in', [1])->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', 'between', 0, 1)->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', 'between', 0, 1)->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->filterBy('id', 'not-between', 2, PHP_INT_MAX)->toArray()
+            $this->dot->get('mixed_array.users')->filterBy('id', 'not-between', 2, PHP_INT_MAX)->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $this->dot->get('mixed_array.users')->filterBy('id', 'not-between', 2, PHP_INT_MAX)->toArray()
+        );
+
+        self::assertSame(
+            [],
+            $this->dot->get('mixed_array.users')->filterBy('no.key', '=', 1)->toArray()
         );
     }
 
@@ -395,13 +537,14 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Where Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::where
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testWhere()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
-
         $user1 = [
             [
                 'id' => 1,
@@ -410,42 +553,47 @@ class BasicArrayTest extends TestCase
         ];
 
         self::assertSame(
-            $user1,
-            $dot->get('mixed_array.users')->where(['id', '=', 1])->toArray()
+            $this->data,
+            $this->dot->where(null)->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->where(['id', '===', 1])->toArray()
+            $this->dot->get('mixed_array.users')->where(['id', '=', 1])->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->where(['id', '<', 2])->toArray()
+            $this->dot->get('mixed_array.users')->where(['id', '===', 1])->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->where(['id', '<=', 1])->toArray()
+            $this->dot->get('mixed_array.users')->where(['id', '<', 2])->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->where(['id', 'in', [1]])->toArray()
+            $this->dot->get('mixed_array.users')->where(['id', '<=', 1])->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->where(['id', 'between', 0, 1])->toArray()
+            $this->dot->get('mixed_array.users')->where(['id', 'in', [1]])->toArray()
         );
 
         self::assertSame(
             $user1,
-            $dot->get('mixed_array.users')->where(['id', 'not-between', 2, PHP_INT_MAX])->toArray()
+            $this->dot->get('mixed_array.users')->where(['id', 'between', 0, 1])->toArray()
+        );
+
+        self::assertSame(
+            $user1,
+            $this->dot->get('mixed_array.users')->where(['id', 'not-between', 2, PHP_INT_MAX])->toArray()
         );
 
         $users = (
-            $dot
+            $this->dot
                 ->get('mixed_array')
                 ->get('users')
                 ->where(
@@ -455,9 +603,24 @@ class BasicArrayTest extends TestCase
                 )
         );
 
+        self::assertSame($user1, $users->toArray());
+    }
+
+
+    /**
+     * Testing the First Method.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::first
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
+     * @return void
+     */
+    public function testFirst()
+    {
         self::assertSame(
-            $user1,
-            $users->toArray()
+            $this->data['mixed_array']['👋.🤘.some-key'],
+            $this->dot->get('mixed_array')->first()
         );
     }
 
@@ -465,43 +628,91 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the toJson Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::toJson
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testToJson()
     {
-        $data = [
-            'a' => [
-                'b' => [
-                    'c' => [
-                        'v1.0' => 1.3,
-                    ],
-                ],
-            ],
-        ];
-
-        $dot = DotArray::create($data);
-
-        $jsonFromString = '{"a":{"b":{"c":{"v1.0":1.3}}}}';
+        $dot            = DotArray::create($this->jsonArray);
         $jsonFromObject = $dot->toJson();
+        $decode         = json_decode($jsonFromObject, true);
 
-        $decode = json_decode($jsonFromObject, true);
-
-        self::assertSame($jsonFromString, $jsonFromObject);
-        self::assertSame($data, $decode);
+        self::assertSame($this->jsonString, $jsonFromObject);
+        self::assertSame($this->jsonArray, $decode);
     }
 
 
     /**
      * Testing the toArray Method.
      *
+     * @covers \BinaryCube\DotArray\DotArray::toArray
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
      * @return void
      */
     public function testToArray()
     {
-        $data = ArrayDataProvider::get();
-        $dot  = DotArray::create($data);
+        self::assertIsArray($this->dot->toArray());
+        self::assertSame($this->data, $this->dot->toArray());
+    }
 
-        self::assertIsArray($dot->toArray());
+
+    /**
+     * Testing the serialize & unserialize Methods.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::serialize
+     * @covers \BinaryCube\DotArray\DotArray::unserialize
+     *
+     * @return void
+     */
+    public function testSerializable()
+    {
+        $serialize = $this->dot->serialize();
+
+        $this->dot->unserialize($serialize);
+
+        $unserialize = $this->dot;
+
+        self::assertIsString($serialize);
+        self::assertInstanceOf(DotArray::class, $unserialize);
+
+        $serialize   = serialize($this->dot);
+        $unserialize = unserialize($serialize);
+
+        self::assertIsString($serialize);
+        self::assertInstanceOf(DotArray::class, $unserialize);
+    }
+
+
+    /**
+     * Testing the jsonSerialize Methods.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::jsonSerialize
+     *
+     * @return void
+     */
+    public function testJsonSerialize()
+    {
+        self::assertSame($this->data, $this->dot->jsonSerialize());
+    }
+
+
+    /**
+     * Testing the getIterator Methods.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::getIterator
+     *
+     * @return void
+     */
+    public function testIterator()
+    {
+
+        self::assertInstanceOf(\ArrayIterator::class, $this->dot->getIterator());
+        self::assertSame($this->data, $this->dot->getIterator()->getArrayCopy());
     }
 
 

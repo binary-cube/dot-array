@@ -235,7 +235,7 @@ class DotArray implements
      *
      * @param null|string $key
      *
-     * @return mixed
+     * @return mixed|static
      */
     public function __invoke($key = null)
     {
