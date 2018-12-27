@@ -1,4 +1,4 @@
-# DotArray - :sailboat: Sail through array using the dot notation
+# DotArray - Sail through array using the dot notation
 
 
 <p align="center">~ Enjoy your :coffee: ~</p>
@@ -22,7 +22,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 
 
-## :hammer: Installing
+## Installing
 
 - **via "composer require"**:
 
@@ -46,7 +46,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 
 
-## :book: Usage
+## Usage
 
 >##### REMEMBER: YOU NEED TO KNOW YOUR DATA
 >##### DotArray::get() can return a new instance of DotArray in case the accessed path is an array or it will return the raw data value or the default given value
@@ -216,7 +216,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 
 
-### :green_apple: Data Sample:
+### Data Sample:
 
 ```php
 $dummyArray = [
@@ -283,7 +283,7 @@ $dummyArray = [
 
 
 
-## :beetle: Bugs and feature requests
+## Bugs and feature requests
 
 Have a bug or a feature request? 
 Please first read the issue guidelines and search for existing and closed issues. 
@@ -292,7 +292,7 @@ If your problem or idea is not addressed yet, [please open a new issue][new-issu
 
 
 
-## :raised_hands: Contributing guidelines
+## Contributing guidelines
 
 All contributions are more than welcomed. 
 Contributions may close an issue, fix a bug (reported or not reported), add new design blocks, 
@@ -306,7 +306,7 @@ personal appearance, race, religion, or sexual identity and orientation.
 
 
 
-#### :trident: Versioning
+#### Versioning
 
 Through the development of new versions, we're going use the [Semantic Versioning][semver]. 
 
@@ -318,7 +318,7 @@ Example: `1.0.0`.
 
 
 
-## :alien: Authors
+## Authors
 
 * **Banciu N. Cristian Mihai**
 
@@ -327,7 +327,7 @@ See also the list of [contributors][contributors] who participated in this proje
 
 
 
-## :pencil2: License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE][license] file for details.
 
