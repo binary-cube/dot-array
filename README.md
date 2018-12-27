@@ -1,4 +1,4 @@
-# DotArray - enjoy your :coffee:
+# DotArray - :sailboat: Sail through array using the dot notation - enjoy your :coffee:
 
 [![Require `PHP >= 7.1`](https://img.shields.io/badge/Require%20PHP-%3E%3D%207.1-brightgreen.svg)][git-source]
 
@@ -20,7 +20,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 
 
-## Installing
+## :hammer: Installing
 
 - **via "composer require"**:
 
@@ -44,7 +44,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 
 
-## Usage
+## :book: Usage
 
 >##### REMEMBER: YOU NEED TO KNOW YOUR DATA
 >##### DotArray::get() can return a new instance of DotArray in case the accessed path is an array or it will return the raw data value or the default given value
@@ -214,7 +214,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
 
 
-### Data Sample:
+### :green_apple: Data Sample:
 
 ```php
 $dummyArray = [
@@ -281,7 +281,7 @@ $dummyArray = [
 
 
 
-## Bugs and feature requests
+## :beetle: Bugs and feature requests
 
 Have a bug or a feature request? 
 Please first read the issue guidelines and search for existing and closed issues. 
@@ -290,7 +290,7 @@ If your problem or idea is not addressed yet, [please open a new issue][new-issu
 
 
 
-## Contributing guidelines
+## :raised_hands: Contributing guidelines
 
 All contributions are more than welcomed. 
 Contributions may close an issue, fix a bug (reported or not reported), add new design blocks, 
@@ -304,7 +304,7 @@ personal appearance, race, religion, or sexual identity and orientation.
 
 
 
-#### Versioning
+#### :trident: Versioning
 
 Through the development of new versions, we're going use the [Semantic Versioning][semver]. 
 
@@ -316,7 +316,7 @@ Example: `1.0.0`.
 
 
 
-## Authors
+## :alien: Authors
 
 * **Banciu N. Cristian Mihai**
 
@@ -325,7 +325,7 @@ See also the list of [contributors][contributors] who participated in this proje
 
 
 
-## License
+## :pencil2: License
 
 This project is licensed under the MIT License - see the [LICENSE][license] file for details.
 
