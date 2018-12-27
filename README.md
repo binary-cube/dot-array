@@ -1,16 +1,14 @@
 # DotArray - :sailboat: Sail through array using the dot notation
 
 
-<p align="center">Enjoy your :coffee:</p>
-
-
-[![Require `PHP >= 7.1`](https://img.shields.io/badge/Require%20PHP-%3E%3D%207.1-brightgreen.svg)][git-source]
+<p align="center">~ Enjoy your :coffee: ~</p>
 
 Accessing PHP Arrays via DOT notation is easy as:
 
 ```php
 DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{some.dotted.key}')
 ```
+[![Require `PHP >= 7.1`](https://img.shields.io/badge/Require%20PHP-%3E%3D%207.1-brightgreen.svg)][git-source]
 [![Latest Stable Version](https://poser.pugx.org/binary-cube/dot-array/version)][packagist]
 [![Total Downloads](https://poser.pugx.org/binary-cube/dot-array/downloads)][packagist]
 [![Build Status](https://travis-ci.org/binary-cube/dot-array.svg?branch=master)](https://travis-ci.org/binary-cube/dot-array)
