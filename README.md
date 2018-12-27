@@ -1,4 +1,8 @@
-# DotArray - :sailboat: Sail through array using the dot notation - enjoy your :coffee:
+# DotArray - :sailboat: Sail through array using the dot notation
+
+
+<p align="center">Enjoy your :coffee:</p>
+
 
 [![Require `PHP >= 7.1`](https://img.shields.io/badge/Require%20PHP-%3E%3D%207.1-brightgreen.svg)][git-source]
 
