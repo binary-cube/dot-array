@@ -67,18 +67,22 @@
     ],
 
     "scripts": {
-
         "check": [
             "@cs-check",
             "@tests"
         ],
 
         "generate-reports": [
+            "@create-folders",
             "@cs-report",
             "@phpmd-report",
             "@tests-report-html",
             "@tests-report-xml",
             "@tests-report-clover"
+        ],
+
+        "create-folders": [
+            "mkdir build"
         ],
 
         "cs-check": "phpcs",
