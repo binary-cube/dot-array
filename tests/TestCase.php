@@ -2,8 +2,6 @@
 
 namespace BinaryCube\DotArray\Tests;
 
-use BinaryCube\DotArray\Tests\Integration\ArrayDataProvider;
-
 /**
  * TestCase
  *
