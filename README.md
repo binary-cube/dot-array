@@ -8,7 +8,7 @@ Accessing PHP Arrays via DOT notation is easy as:
 ```php
 DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{some.dotted.key}')
 ```
-[![Require `PHP >= 7.1`](https://img.shields.io/badge/Require%20PHP-%3E%3D%207.1-brightgreen.svg)][git-source]
+[![Minimum PHP Version `PHP >= 7.1`](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg)][php-site]
 [![Latest Stable Version](https://poser.pugx.org/binary-cube/dot-array/version)][packagist]
 [![Total Downloads](https://poser.pugx.org/binary-cube/dot-array/downloads)][packagist]
 [![Build Status](https://travis-ci.org/binary-cube/dot-array.svg?branch=master)](https://travis-ci.org/binary-cube/dot-array)
@@ -337,6 +337,7 @@ This project is licensed under the MIT License - see the [LICENSE][license] file
 [domain]:               https://binary-cube.com
 [homepage]:             https://binary-cube.com
 [git-source]:           https://github.com/binary-cube/dot-array
+[php-site]:             https://php.net
 [semver]:               https://semver.org
 [code-of-conduct]:      https://github.com/binary-cube/dot-array/blob/master/code-of-conduct.md
 [license]:              https://github.com/binary-cube/dot-array/blob/master/LICENSE

@@ -4,9 +4,6 @@ os:
     - linux
 
 matrix:
-    allow_failures:
-        - php: hhvm
-
     include:
         - php: 7.1
         - php: 7.2
@@ -18,8 +15,8 @@ before_script:
     - travis_retry composer install --no-interaction --prefer-source
 
 script:
-    - php vendor/bin/phpcs
-    - php vendor/bin/phpunit --coverage-clover=coverage.xml --debug
+    - composer check
+    - composer generate-reports
 
 after_script:
-    - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash) -f "build/phpunit/coverage/clover/index.xml"
