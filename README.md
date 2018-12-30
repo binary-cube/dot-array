@@ -118,6 +118,25 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         $dot['books.{sci-fi & fantasy}'] = [];
         ```
 
+- **merge**:
+    -   ```php
+        // Example 1.
+        $dot->merge(['key_1' => ['some_key' => 'some_value']]);
+
+        // Example 2.
+        $dot->merge(
+            [
+                'key_1' => ['some_key' => 'some_value'],
+            ], 
+            [
+                'key_2' => ['some_key' => 'some_value'],
+            ],
+            [
+                'key_n' => ['some_key' => 'some_value']
+            ],
+        );
+        ```
+
 - **delete** *(unset(...))*:
     -   ```php
         $dot->delete('books.{sci-fi & fantasy}');
@@ -211,6 +230,58 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         $books = $dot->get('books.{childre\'s books}')->where(function ($value, $key) {
             return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
+        ```
+
+- **toArray**:
+    -   ```php
+        // Getting the internal raw array.
+
+        // Example 1.
+        $dot->toArray();
+
+        // Example 2.
+        $dot->get('books.{sci-fi & fantasy}')->toArray();
+        ```
+
+- **toJson**:
+    -   ```php
+        // Getting the internal raw array as JSON.
+
+        // Example 1.
+        $dot->toJson();
+
+        // Example 2.
+        $dot->get('books.{sci-fi & fantasy}')->toJson();
+        ```
+        
+- **toFlat**:
+    -   ```php
+        $dot = DotArray::create(
+            [
+                'a' => [
+                    'b' => 'value',
+                ],
+
+                'b' => [
+                    1,
+                    2,
+                    3,
+                ],
+            ]
+        );
+
+        $dot->toFlat();
+
+        /*
+            The output will be an array:
+
+            [
+                '{{a}}.{{b}}' => 'value',
+                '{{b}}.{{0}}' => 1,
+                '{{b}}.{{1}}' => 2,
+                '{{b}}.{{2}}' => 3,
+            ],
+        */
         ```
 
 

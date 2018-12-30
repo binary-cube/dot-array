@@ -66,6 +66,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Get Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::get
      * @covers \BinaryCube\DotArray\DotArray::toArray
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -107,6 +108,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Set Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::set
      * @covers \BinaryCube\DotArray\DotArray::toArray
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -122,15 +124,24 @@ class BasicArrayTest extends TestCase
             ],
         ];
 
-        $this->dot['a']['b']['b'] = 2;
+        $this->dot['a']['b']['b']   = 2;
+        $this->dot['a']['b']['obj'] = [
+            DotArray::create(['key' => 'was a dot object 1']),
+            DotArray::create(['key' => 'was a dot object 2']),
+        ];
 
         $this->dot->set('mixed_array.{new-key}', []);
         $this->dot->set('mixed_array.{👋.🤘.some-key}', []);
         $this->dot->set('a.b.a', 1);
         $this->dot->set('new1.new2', 1);
+        $this->dot->set('{dot.obj}', DotArray::create('some_value'));
 
         self::assertIsArray($this->dot->get('mixed_array.{new-key}')->toArray());
         self::assertEmpty($this->dot->get('mixed_array.{👋.🤘.some-key}')->toArray());
+
+        self::assertIsArray($this->dot->get('{dot.obj}')->toArray());
+        self::assertIsArray($this->dot->get('a.b.obj')->toArray());
+        self::assertIsArray($this->dot->get('a.b.obj.0')->toArray());
 
         self::assertIsInt($this->dot->get('a.b.a'));
         self::assertIsInt($this->dot['a']['b']['a']);
@@ -153,6 +164,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Has Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::has
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -183,6 +195,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the isEmpty Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::isEmpty
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -213,6 +226,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Delete Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::delete
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -248,6 +262,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Clear Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::clear
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -276,6 +291,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Merge Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::merge
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -332,8 +348,33 @@ class BasicArrayTest extends TestCase
             ]
         ];
 
-        $this->dot->merge($extraData);
+        $this->dot->merge(
+            $extraData,
+            [
+                'new-entry' => [
+                    'c' => new DotArray(
+                        [
+                            'd' => [1],
+                        ]
+                    ),
+                ],
+            ],
+            [
+                'new-entry' => [
+                    'c' => new DotArray(
+                        [
+                            'd' => [1],
+                        ]
+                    ),
+                ],
+            ]
+        );
+
         self::assertIsArray($this->dot->get('{new-entry}.a')->toArray());
+        self::assertIsArray($this->dot->get('{new-entry}.b')->toArray());
+        self::assertIsArray($this->dot->get('{new-entry}.b.c')->toArray());
+        self::assertIsArray($this->dot->get('{new-entry}.b.c.e2')->toArray());
+
         self::assertEquals('new value for assoc_array.one.element_1', $this->dot->get('assoc_array.one.element_1'));
         self::assertEquals(['.other.config' => ['port' => 9300]], $this->dot->get('mixed_array.{👋.🤘.some-key}.config.{elastic-search}.{v6.0}')->toArray());
         self::assertCount(3, $this->dot->get('mixed_array.{👋.🤘.some-key}.config.memcached.servers'));
@@ -343,6 +384,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Count Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::count
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -364,6 +406,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Find Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::find
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -403,6 +446,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Filter Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::filter
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -427,6 +471,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the FilterBy Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::filterBy
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -537,6 +582,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Where Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::where
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -610,6 +656,7 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the First Method.
      *
+     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::first
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -622,6 +669,22 @@ class BasicArrayTest extends TestCase
             $this->data['mixed_array']['👋.🤘.some-key'],
             $this->dot->get('mixed_array')->first()
         );
+    }
+
+
+    /**
+     * Testing the toArray Method.
+     *
+     * @covers \BinaryCube\DotArray\DotArray::toArray
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
+     * @return void
+     */
+    public function testToArray()
+    {
+        self::assertIsArray($this->dot->toArray());
+        self::assertSame($this->data, $this->dot->toArray());
     }
 
 
@@ -646,18 +709,43 @@ class BasicArrayTest extends TestCase
 
 
     /**
-     * Testing the toArray Method.
+     * Testing the toFlatten Method.
      *
-     * @covers \BinaryCube\DotArray\DotArray::toArray
+     * @covers \BinaryCube\DotArray\DotPathTrait
+     * @covers \BinaryCube\DotArray\DotPathTrait::flatten
+     * @covers \BinaryCube\DotArray\DotPathTrait::dotPathPattern
+     * @covers \BinaryCube\DotArray\DotPathTrait::wrapSegmentKey
+     * @covers \BinaryCube\DotArray\DotArray::toFlat
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
      *
      * @return void
      */
-    public function testToArray()
+    public function testToFlatten()
     {
-        self::assertIsArray($this->dot->toArray());
-        self::assertSame($this->data, $this->dot->toArray());
+        $dot = DotArray::create(
+            [
+                'a' => [
+                    'b' => 'value',
+                ],
+
+                'b' => [
+                    1,
+                    2,
+                    3,
+                ],
+            ]
+        );
+
+        self::assertSame(
+            [
+                '{{a}}.{{b}}' => 'value',
+                '{{b}}.{{0}}' => 1,
+                '{{b}}.{{1}}' => 2,
+                '{{b}}.{{2}}' => 3,
+            ],
+            $dot->toFlat()
+        );
     }
 
 

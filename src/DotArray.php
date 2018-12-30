@@ -18,47 +18,15 @@ class DotArray implements
     \Countable
 {
 
+    /* Traits. */
+    use DotPathTrait;
+
     /**
      * Unique object identifier.
      *
      * @var string
      */
     protected $uniqueIdentifier;
-
-    /**
-     * Config.
-     *
-     * @var array
-     */
-    protected $config = [
-        'path' => [
-            'template'  => '#(?|(?|[<token-start>](.*?)[<token-end>])|(.*?))(?:$|\.+)#i',
-            'wildcards' => [
-                '<token-start>' => ['\'', '\"', '\[', '\(', '\{'],
-                '<token-end>'   => ['\'', '\"', '\]', '\)', '\}'],
-            ],
-        ],
-    ];
-
-    /**
-     * The pattern that allow to match the JSON paths that use the dot notation.
-     *
-     * Allowed tokens for more complex paths: '', "", [], (), {}
-     * Examples:
-     *
-     * - foo.bar
-     * - foo.'bar'
-     * - foo."bar"
-     * - foo.[bar]
-     * - foo.(bar)
-     * - foo.{bar}
-     *
-     * Or more complex:
-     * - foo.{bar}.[component].{version.1.0}
-     *
-     * @var string
-     */
-    protected $nestedPathPattern;
 
     /**
      * Stores the original data.
@@ -99,17 +67,52 @@ class DotArray implements
      *
      * @return array
      */
-    protected static function normalize(&$items)
+    protected static function normalize($items)
     {
-        if (\is_array($items)) {
-            return $items;
-        } else if (empty($items)) {
-            return [];
-        } else if ($items instanceof self) {
-            return $items->toArray();
+        if ($items instanceof self) {
+            $items = $items->toArray();
         }
 
-        return (array) $items;
+        if (\is_array($items)) {
+            foreach ($items as $k => $v) {
+                if (\is_array($v) || $v instanceof self) {
+                    $v = static::normalize($v);
+                }
+                $items[$k] = $v;
+            }
+        }
+
+        return (array) (empty($items) ? [] : $items);
+    }
+
+
+    /**
+     * @param array|DotArray|mixed      $array1
+     * @param null|array|DotArray|mixed $array2
+     *
+     * @return array
+     */
+    protected static function mergeRecursive($array1, $array2 = null)
+    {
+        $args = static::normalize(\func_get_args());
+        $res  = \array_shift($args);
+
+        while (!empty($args)) {
+            foreach (\array_shift($args) as $k => $v) {
+                if (\is_int($k) && \array_key_exists($k, $res)) {
+                    $res[] = $v;
+                    continue;
+                }
+
+                if (\is_array($v) && isset($res[$k]) && \is_array($res[$k])) {
+                    $v = static::mergeRecursive($res[$k], $v);
+                }
+
+                $res[$k] = $v;
+            }
+        }
+
+        return $res;
     }
 
 
@@ -249,141 +252,17 @@ class DotArray implements
     public function uniqueIdentifier()
     {
         if (empty($this->uniqueIdentifier)) {
-            $this->uniqueIdentifier = vsprintf(
+            $this->uniqueIdentifier = \vsprintf(
                 '{%s}.{%s}.{%s}',
                 [
                     static::class,
                     \uniqid('', true),
-                    microtime(true),
+                    \microtime(true),
                 ]
             );
         }
 
         return $this->uniqueIdentifier;
-    }
-
-
-    /**
-     * Getting the nested path pattern.
-     *
-     * @return string
-     */
-    protected function nestedPathPattern()
-    {
-        if (empty($this->nestedPathPattern)) {
-            $path = $this->config['path']['template'];
-
-            foreach ($this->config['path']['wildcards'] as $wildcard => $tokens) {
-                $path = \str_replace($wildcard, \implode('', $tokens), $path);
-            }
-
-            $this->nestedPathPattern = $path;
-        }
-
-        return $this->nestedPathPattern;
-    }
-
-
-    /**
-     * Converts dot string path to segments.
-     *
-     * @param string $path
-     *
-     * @return array
-     */
-    protected function pathToSegments($path)
-    {
-        $path     = \trim($path, " \t\n\r\0\x0B\.");
-        $segments = [];
-        $matches  = [];
-
-        \preg_match_all($this->nestedPathPattern(), $path, $matches);
-
-        if (!empty($matches[1])) {
-            $matches = $matches[1];
-
-            $segments = \array_filter(
-                $matches,
-                function ($match) {
-                    return (\mb_strlen($match, 'UTF-8') > 0);
-                }
-            );
-        }
-
-        unset($matches);
-
-        return (empty($segments) ? [] : $segments);
-    }
-
-
-    /**
-     * Wrap a given string into special characters.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    protected function wrapSegmentKey($key)
-    {
-        return "{{~$key~}}";
-    }
-
-
-    /**
-     * @param array $segments
-     *
-     * @return string
-     */
-    protected function segmentsToKey(array $segments)
-    {
-        return (
-            \implode(
-                '',
-                \array_map(
-                    [$this, 'wrapSegmentKey'],
-                    $segments
-                )
-            )
-        );
-    }
-
-
-    /**
-     * @param array|DotArray|mixed      $array1
-     * @param null|array|DotArray|mixed $array2
-     *
-     * @return array
-     */
-    protected static function mergeRecursive($array1, $array2 = null)
-    {
-        $args = \func_get_args();
-        $res  = \array_shift($args);
-
-        while (!empty($args)) {
-            foreach (\array_shift($args) as $k => $v) {
-                if ($v instanceof self) {
-                    $v = $v->toArray();
-                }
-
-                if (\is_int($k)) {
-                    if (\array_key_exists($k, $res)) {
-                        $res[] = $v;
-                    } else {
-                        $res[$k] = $v;
-                    }
-                } else if (
-                    \is_array($v)
-                    && isset($res[$k])
-                    && \is_array($res[$k])
-                ) {
-                    $res[$k] = static::mergeRecursive($res[$k], $v);
-                } else {
-                    $res[$k] = $v;
-                }
-            }//end foreach
-        }//end while
-
-        return $res;
     }
 
 
@@ -425,7 +304,7 @@ class DotArray implements
      */
     protected function &read($key, $default)
     {
-        $segments = $this->pathToSegments($key);
+        $segments = static::pathToSegments($key);
         $items    = &$this->items;
 
         foreach ($segments as $segment) {
@@ -439,6 +318,8 @@ class DotArray implements
             $items = &$items[$segment];
         }
 
+        unset($segments);
+
         return $items;
     }
 
@@ -451,7 +332,7 @@ class DotArray implements
      */
     protected function write($key, $value)
     {
-        $segments = $this->pathToSegments($key);
+        $segments = static::pathToSegments($key);
         $count    = \count($segments);
         $items    = &$this->items;
 
@@ -471,6 +352,12 @@ class DotArray implements
             $items = &$items[$segment];
         }
 
+        unset($segments, $count);
+
+        if (\is_array($value) || $value instanceof self) {
+            $value = static::normalize($value);
+        }
+
         $items = $value;
     }
 
@@ -484,7 +371,7 @@ class DotArray implements
      */
     protected function remove($key)
     {
-        $segments = $this->pathToSegments($key);
+        $segments = static::pathToSegments($key);
         $count    = \count($segments);
         $items    = &$this->items;
 
@@ -504,6 +391,8 @@ class DotArray implements
 
             $items = &$items[$segment];
         }
+
+        unset($segments, $count);
     }
 
 
@@ -514,12 +403,14 @@ class DotArray implements
      */
     public function has($key)
     {
-        return ($this->read($key, $this->uniqueIdentifier()) !== $this->uniqueIdentifier());
+        $identifier = $this->uniqueIdentifier();
+
+        return ($identifier !== $this->read($key, $identifier));
     }
 
 
     /**
-     * Check if a given key is empty.
+     * Check if a given key contains empty values (null, [], 0, false)
      *
      * @param null|string $key
      *
@@ -527,15 +418,7 @@ class DotArray implements
      */
     public function isEmpty($key = null)
     {
-        if (!isset($key)) {
-            return empty($this->items);
-        }
-
         $items = $this->read($key, null);
-
-        if ($items instanceof self) {
-            $items = $items->toArray();
-        }
 
         return empty($items);
     }
@@ -569,7 +452,7 @@ class DotArray implements
      */
     public function set($keys, $value)
     {
-        $keys = (array) $keys;
+        $keys = (array) (!isset($keys) ? [$keys] : $keys);
 
         foreach ($keys as $key) {
             $this->write($key, $value);
@@ -649,8 +532,7 @@ class DotArray implements
      * @param \Closure|null $closure
      * @param int           $flag    Flag determining what arguments are sent to callback.
      *                               ARRAY_FILTER_USE_KEY :: pass key as the only argument
-     *                               to callback.
-     *                               ARRAY_FILTER_USE_BOTH :: pass both value
+     *                               to callback. ARRAY_FILTER_USE_BOTH :: pass both value
      *                               and key as arguments to callback.
      *
      * @return static
@@ -701,7 +583,7 @@ class DotArray implements
     public function filterBy($property, $comparisonOperator, $value)
     {
         $args  = \func_get_args();
-        $value = (array) (array_slice($args, 2, count($args)));
+        $value = (array) \array_slice($args, 2, \count($args));
 
         $closure   = null;
         $operators = static::operators();
@@ -715,7 +597,7 @@ class DotArray implements
                 $closure = function ($item) use ($entry, $property, $value) {
                     $item = (array) $item;
 
-                    if (!array_key_exists($property, $item)) {
+                    if (!\array_key_exists($property, $item)) {
                         return false;
                     }
 
@@ -903,6 +785,18 @@ class DotArray implements
     public function toJson($options = 0)
     {
         return \json_encode($this->items, $options);
+    }
+
+
+    /**
+     * Flatten the internal array using the dot delimiter,
+     * also the keys are wrapped inside {{key}} (2 x curly braces).
+     *
+     * @return array
+     */
+    public function toFlat()
+    {
+        return static::flatten($this->items);
     }
 
 

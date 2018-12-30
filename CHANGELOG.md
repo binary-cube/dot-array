@@ -1,6 +1,18 @@
 DotArray Change Log 
 =====================
 
+1.0.4 December 30, 2018
+-----------------------------
+
+- Refactoring DotArray:
+    - Using a Trait (DotPathTrait) to split code in more organized units.
+    - Refactor DotArray::mergeRecursive :: less `if ... else` branches.
+    - Refactor DotArray::normalize :: now is recursive and if type of the entry is DotArray then is converted to array.
+    - Apply DotArray::normalize after every DotArray::write used when DotArray::set is called.
+- Fix composer.json `create-folders` script :: in case of fail creating the `build` folder, exit with code 0.
+- Updating README.md
+- Updating Tests 
+
 1.0.3 December 28, 2018
 -----------------------------
 

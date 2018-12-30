@@ -82,7 +82,7 @@
         ],
 
         "create-folders": [
-            "mkdir build"
+            "[ ! -d build ] && mkdir -p build || exit 0;"
         ],
 
         "cs-check": "phpcs",
@@ -95,5 +95,8 @@
         "tests-report-html":    "phpunit --coverage-html build/phpunit/coverage/html                || exit 0;",
         "tests-report-xml":     "phpunit --coverage-xml build/phpunit/coverage/xml                  || exit 0;",
         "tests-report-clover":  "phpunit --coverage-clover build/phpunit/coverage/clover/index.xml  || exit 0;"
+    },
+
+    "scripts-descriptions": {
     }
 }
