@@ -82,9 +82,15 @@ class CreateTest extends TestCase
             )
         );
 
+        self::assertIsArray(DotArray::create(null)->toArray());
+        self::assertIsArray(DotArray::create(1)->toArray());
+        self::assertIsArray(DotArray::create([])->toArray());
+        self::assertIsArray(DotArray::create(DotArray::create([]))->toArray());
+
         $dot = new DotArray($this->data);
 
         self::assertIsArray($dot->toArray());
+
         self::assertArrayHasKey('empty_array', $dot->toArray());
         self::assertArrayHasKey('indexed_array', $dot->toArray());
         self::assertArrayHasKey('assoc_array', $dot->toArray());
