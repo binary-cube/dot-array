@@ -15,6 +15,7 @@
 *.bat  text
 *.sql  text
 *.yml  text
+*.neon text
 
 
 # Ensure those won't be messed up with
@@ -31,6 +32,7 @@
 /phpunit.xml        export-ignore
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
+/phpstan.neon       export-ignore
 /.travis.yml        export-ignore
 /.scrutinizer.yml   export-ignore
 

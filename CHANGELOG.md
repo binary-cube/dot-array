@@ -1,6 +1,16 @@
 DotArray Change Log 
 =====================
 
+1.0.5 December 30, 2018
+-----------------------------
+
+- Refactoring DotArray:
+    - Using a Trait (DotFilteringTrait) to split code in more organized units.
+- Refactoring DotPathTrait::flatten
+- using PHPStan.
+- Updating composer.json scripts to use PHPStan.
+- More Tests. 
+
 1.0.4 December 30, 2018
 -----------------------------
 

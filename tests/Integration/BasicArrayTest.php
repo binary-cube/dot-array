@@ -158,6 +158,8 @@ class BasicArrayTest extends TestCase
         self::assertIsInt($this->dot->get('new1.new2'));
         self::assertIsInt($this->dot['new1']['new2']);
         self::assertIsInt($this->dot['new1.new2']);
+
+        self::assertSame([], $this->dot->set(null, null)->toArray());
     }
 
 
@@ -407,6 +409,7 @@ class BasicArrayTest extends TestCase
      * Testing the Find Method.
      *
      * @covers \BinaryCube\DotArray\DotPathTrait
+     * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::find
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -447,6 +450,7 @@ class BasicArrayTest extends TestCase
      * Testing the Filter Method.
      *
      * @covers \BinaryCube\DotArray\DotPathTrait
+     * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::filter
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -472,6 +476,7 @@ class BasicArrayTest extends TestCase
      * Testing the FilterBy Method.
      *
      * @covers \BinaryCube\DotArray\DotPathTrait
+     * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::filterBy
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -583,6 +588,7 @@ class BasicArrayTest extends TestCase
      * Testing the Where Method.
      *
      * @covers \BinaryCube\DotArray\DotPathTrait
+     * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::where
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -709,7 +715,7 @@ class BasicArrayTest extends TestCase
 
 
     /**
-     * Testing the toFlatten Method.
+     * Testing the toFlat Method.
      *
      * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotPathTrait::flatten
@@ -721,7 +727,7 @@ class BasicArrayTest extends TestCase
      *
      * @return void
      */
-    public function testToFlatten()
+    public function testToFlat()
     {
         $dot = DotArray::create(
             [
@@ -733,16 +739,24 @@ class BasicArrayTest extends TestCase
                     1,
                     2,
                     3,
+                    'array' => [
+                        1,
+                        2,
+                        3,
+                    ]
                 ],
             ]
         );
 
         self::assertSame(
             [
-                '{{a}}.{{b}}' => 'value',
-                '{{b}}.{{0}}' => 1,
-                '{{b}}.{{1}}' => 2,
-                '{{b}}.{{2}}' => 3,
+                '{a}.{b}' => 'value',
+                '{b}.{0}' => 1,
+                '{b}.{1}' => 2,
+                '{b}.{2}' => 3,
+                '{b}.{array}.{0}' => 1,
+                '{b}.{array}.{1}' => 2,
+                '{b}.{array}.{2}' => 3,
             ],
             $dot->toFlat()
         );

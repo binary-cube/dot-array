@@ -32,7 +32,8 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
         "phpunit/phpunit": "~7.0",
-        "phpmd/phpmd": "*"
+        "phpmd/phpmd": "*",
+        "phpstan/phpstan": "*"
     },
 
     "suggest": {
@@ -69,12 +70,14 @@
     "scripts": {
         "check": [
             "@cs-check",
+            "@phpstan",
             "@tests"
         ],
 
         "generate-reports": [
             "@create-folders",
             "@cs-report",
+            "@phpstan-report",
             "@phpmd-report",
             "@tests-report-html",
             "@tests-report-xml",
@@ -87,14 +90,16 @@
 
         "cs-check": "phpcs",
         "cs-fix":   "phpcbf",
+        "phpstan":  "phpstan analyze src --no-progress",
         "phpmd":    "phpmd src text phpmd.xml.dist",
         "tests":    "phpunit",
 
-        "cs-report":            "phpcs --report=json --report-file=build/phpcs-report.json          || exit 0;",
-        "phpmd-report":         "phpmd src xml phpmd.xml.dist --reportfile build/phpmd-report.xml   || exit 0;",
-        "tests-report-html":    "phpunit --coverage-html build/phpunit/coverage/html                || exit 0;",
-        "tests-report-xml":     "phpunit --coverage-xml build/phpunit/coverage/xml                  || exit 0;",
-        "tests-report-clover":  "phpunit --coverage-clover build/phpunit/coverage/clover/index.xml  || exit 0;"
+        "cs-report":            "phpcs --report=json --report-file=build/phpcs-report.json || exit 0;",
+        "phpstan-report":       "phpstan analyze src --error-format=checkstyle > build/phpstan-check-style.xml --no-progress || exit 0;",
+        "phpmd-report":         "phpmd src xml phpmd.xml.dist --reportfile build/phpmd-report.xml || exit 0;",
+        "tests-report-html":    "phpunit --coverage-html build/phpunit/coverage/html || exit 0;",
+        "tests-report-xml":     "phpunit --coverage-xml build/phpunit/coverage/xml || exit 0;",
+        "tests-report-clover":  "phpunit --coverage-clover build/phpunit/coverage/clover/index.xml || exit 0;"
     },
 
     "scripts-descriptions": {

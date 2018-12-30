@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ruleset name="Base Coding Standards">
+<ruleset name="Base Coding Standard">
 
-    <description>Base Coding Standards</description>
+    <description>Base Coding Standard</description>
 
     <!-- README: http://edorian.github.io/php-coding-standard-generator/#phpcs -->
 

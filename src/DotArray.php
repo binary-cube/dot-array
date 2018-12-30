@@ -20,6 +20,7 @@ class DotArray implements
 
     /* Traits. */
     use DotPathTrait;
+    use DotFilteringTrait;
 
     /**
      * Unique object identifier.
@@ -117,101 +118,6 @@ class DotArray implements
 
 
     /**
-     * List with internal operators and the associated callbacks.
-     *
-     * @return array
-     */
-    protected static function operators()
-    {
-        return [
-            [
-                'tokens' => ['=', '==', 'eq'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] == $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['===', 'i'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] === $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['!=', 'ne'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] != $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['!==', 'ni'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] !== $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['<', 'lt'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] < $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['>', 'gt'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] > $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['<=', 'lte'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] <= $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['>=', 'gte'],
-                'closure' => function ($item, $property, $value) {
-                    return $item[$property] >= $value[0];
-                },
-            ],
-
-            [
-                'tokens' => ['in', 'contains'],
-                'closure' => function ($item, $property, $value) {
-                    return \in_array($item[$property], (array) $value, true);
-                },
-            ],
-
-            [
-                'tokens' => ['not-in', 'not-contains'],
-                'closure' => function ($item, $property, $value) {
-                    return !\in_array($item[$property], (array) $value, true);
-                },
-            ],
-
-            [
-                'tokens' => ['between'],
-                'closure' => function ($item, $property, $value) {
-                    return ($item[$property] >= $value[0] && $item[$property] <= $value[1]);
-                },
-            ],
-
-            [
-                'tokens' => ['not-between'],
-                'closure' => function ($item, $property, $value) {
-                    return ($item[$property] < $value[0] || $item[$property] > $value[1]);
-                },
-            ],
-        ];
-    }
-
-
-    /**
      * DotArray Constructor.
      *
      * @param mixed $items
@@ -219,6 +125,8 @@ class DotArray implements
     public function __construct($items = [])
     {
         $this->items = static::normalize($items);
+
+        $this->uniqueIdentifier();
     }
 
 
@@ -229,7 +137,6 @@ class DotArray implements
     {
         unset($this->uniqueIdentifier);
         unset($this->items);
-        unset($this->nestedPathPattern);
     }
 
 
@@ -252,8 +159,7 @@ class DotArray implements
     public function uniqueIdentifier()
     {
         if (empty($this->uniqueIdentifier)) {
-            $this->uniqueIdentifier = \vsprintf(
-                '{%s}.{%s}.{%s}',
+            $this->uniqueIdentifier = static::segmentsToKey(
                 [
                     static::class,
                     \uniqid('', true),
@@ -297,12 +203,12 @@ class DotArray implements
 
 
     /**
-     * @param string $key
-     * @param mixed  $default
+     * @param string|null|mixed $key
+     * @param mixed             $default
      *
      * @return array|mixed
      */
-    protected function &read($key, $default)
+    protected function &read($key = null, $default = null)
     {
         $segments = static::pathToSegments($key);
         $items    = &$this->items;
@@ -340,10 +246,7 @@ class DotArray implements
             $segment = $segments[$i];
 
             if (
-                (
-                    !isset($items[$segment])
-                    || !\is_array($items[$segment])
-                )
+                (!isset($items[$segment]) || !\is_array($items[$segment]))
                 && ($i < ($count - 1))
             ) {
                 $items[$segment] = [];
@@ -352,13 +255,15 @@ class DotArray implements
             $items = &$items[$segment];
         }
 
-        unset($segments, $count);
-
         if (\is_array($value) || $value instanceof self) {
             $value = static::normalize($value);
         }
 
         $items = $value;
+
+        if (!\is_array($this->items)) {
+            $this->items = static::normalize($this->items);
+        }
     }
 
 
@@ -391,8 +296,6 @@ class DotArray implements
 
             $items = &$items[$segment];
         }
-
-        unset($segments, $count);
     }
 
 
@@ -445,12 +348,12 @@ class DotArray implements
     /**
      * Set the given value to the provided key or keys.
      *
-     * @param string|array $keys
-     * @param mixed        $value
+     * @param null|string|array $keys
+     * @param mixed|mixed       $value
      *
      * @return static
      */
-    public function set($keys, $value)
+    public function set($keys = null, $value = [])
     {
         $keys = (array) (!isset($keys) ? [$keys] : $keys);
 
@@ -485,7 +388,7 @@ class DotArray implements
      * Set the contents of a given key or keys to the given value (default is empty array).
      *
      * @param null|string|array $keys
-     * @param array             $value
+     * @param array|mixed       $value
      *
      * @return static
      */
@@ -498,168 +401,6 @@ class DotArray implements
         }
 
         return $this;
-    }
-
-
-    /**
-     * Find the first item in an array that passes the truth test, otherwise return false
-     * The signature of the callable must be: `function ($value, $key)`
-     *
-     * @param \Closure $closure
-     *
-     * @return false|mixed
-     */
-    public function find(\Closure $closure)
-    {
-        foreach ($this->items as $key => $value) {
-            if ($closure($value, $key)) {
-                if (\is_array($value)) {
-                    $value = static::create($value);
-                }
-
-                return $value;
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Use a callable function to filter through items.
-     * The signature of the callable must be: `function ($value, $key)`
-     *
-     * @param \Closure|null $closure
-     * @param int           $flag    Flag determining what arguments are sent to callback.
-     *                               ARRAY_FILTER_USE_KEY :: pass key as the only argument
-     *                               to callback. ARRAY_FILTER_USE_BOTH :: pass both value
-     *                               and key as arguments to callback.
-     *
-     * @return static
-     */
-    public function filter(\Closure $closure = null, $flag = ARRAY_FILTER_USE_BOTH)
-    {
-        $items = $this->items;
-
-        if (!isset($closure)) {
-            return static::create($items);
-        }
-
-        return (
-            static::create(
-                \array_values(
-                    \array_filter(
-                        $items,
-                        $closure,
-                        $flag
-                    )
-                )
-            )
-        );
-    }
-
-
-    /**
-     * Allow to filter an array using one of the following comparison operators:
-     *  - [ =, ==, eq (equal) ]
-     *  - [ ===, i (identical) ]
-     *  - [ !=, ne (not equal) ]
-     *  - [ !==, ni (not identical) ]
-     *  - [ <, lt (less than) ]
-     *  - [ >, gr (greater than) ]
-     *  - [ <=, lte (less than or equal to) ]
-     *  - [ =>, gte (greater than or equal to) ]
-     *  - [ in, contains ]
-     *  - [ not-in, not-contains ]
-     *  - [ between ]
-     *  - [ not-between ]
-     *
-     * @param string $property
-     * @param string $comparisonOperator
-     * @param mixed  $value
-     *
-     * @return static
-     */
-    public function filterBy($property, $comparisonOperator, $value)
-    {
-        $args  = \func_get_args();
-        $value = (array) \array_slice($args, 2, \count($args));
-
-        $closure   = null;
-        $operators = static::operators();
-
-        if (isset($value[0]) && \is_array($value[0])) {
-            $value = $value[0];
-        }
-
-        foreach ($operators as $entry) {
-            if (\in_array($comparisonOperator, $entry['tokens'])) {
-                $closure = function ($item) use ($entry, $property, $value) {
-                    $item = (array) $item;
-
-                    if (!\array_key_exists($property, $item)) {
-                        return false;
-                    }
-
-                    return $entry['closure']($item, $property, $value);
-                };
-
-                break;
-            }
-        }
-
-        return $this->filter($closure);
-    }
-
-
-    /**
-     * Filtering through array.
-     * The signature of the call can be:
-     * - where([property, comparisonOperator, ...value])
-     * - where(\Closure) :: The signature of the callable must be: `function ($value, $key)`
-     * - where([\Closure]) :: The signature of the callable must be: `function ($value, $key)`
-     *
-     * Allowed comparison operators:
-     *  - [ =, ==, eq (equal) ]
-     *  - [ ===, i (identical) ]
-     *  - [ !=, ne (not equal) ]
-     *  - [ !==, ni (not identical) ]
-     *  - [ <, lt (less than) ]
-     *  - [ >, gr (greater than) ]
-     *  - [ <=, lte (less than or equal to) ]
-     *  - [ =>, gte (greater than or equal to) ]
-     *  - [ in, contains ]
-     *  - [ not-in, not-contains ]
-     *  - [ between ]
-     *  - [ not-between ]
-     *
-     * @param array|callable $criteria
-     *
-     * @return static
-     */
-    public function where($criteria)
-    {
-        $criteria = (array) $criteria;
-
-        if (empty($criteria)) {
-            return $this->filter();
-        }
-
-        $closure = \array_shift($criteria);
-
-        if ($closure instanceof \Closure) {
-            return $this->filter($closure);
-        }
-
-        $property           = $closure;
-        $comparisonOperator = \array_shift($criteria);
-        $value              = $criteria;
-
-        if (isset($value[0]) && \is_array($value[0])) {
-            $value = $value[0];
-        }
-
-        return $this->filterBy($property, $comparisonOperator, $value);
     }
 
 
@@ -769,38 +510,6 @@ class DotArray implements
 
 
     /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->items;
-    }
-
-
-    /**
-     * @param int $options
-     *
-     * @return string
-     */
-    public function toJson($options = 0)
-    {
-        return \json_encode($this->items, $options);
-    }
-
-
-    /**
-     * Flatten the internal array using the dot delimiter,
-     * also the keys are wrapped inside {{key}} (2 x curly braces).
-     *
-     * @return array
-     */
-    public function toFlat()
-    {
-        return static::flatten($this->items);
-    }
-
-
-    /**
      * Specify data which should be serialized to JSON
      *
      * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
@@ -860,6 +569,38 @@ class DotArray implements
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
+    }
+
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->items;
+    }
+
+
+    /**
+     * @param int $options
+     *
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return (string) \json_encode($this->items, $options);
+    }
+
+
+    /**
+     * Flatten the internal array using the dot delimiter,
+     * also the keys are wrapped inside {key} (1 x curly braces).
+     *
+     * @return array
+     */
+    public function toFlat()
+    {
+        return static::flatten($this->items);
     }
 
 

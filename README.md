@@ -261,11 +261,16 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
                 'a' => [
                     'b' => 'value',
                 ],
-
+    
                 'b' => [
                     1,
                     2,
                     3,
+                    'array' => [
+                        1,
+                        2,
+                        3,
+                    ]
                 ],
             ]
         );
@@ -274,12 +279,14 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
 
         /*
             The output will be an array:
-
             [
-                '{{a}}.{{b}}' => 'value',
-                '{{b}}.{{0}}' => 1,
-                '{{b}}.{{1}}' => 2,
-                '{{b}}.{{2}}' => 3,
+                '{a}.{b}' => 'value',
+                '{b}.{0}' => 1,
+                '{b}.{1}' => 2,
+                '{b}.{2}' => 3,
+                '{b}.{array}.{0}' => 1,
+                '{b}.{array}.{1}' => 2,
+                '{b}.{array}.{2}' => 3,
             ],
         */
         ```

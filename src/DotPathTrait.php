@@ -20,7 +20,7 @@ trait DotPathTrait
      */
     protected static $dotPathConfig = [
         'template'  => '#(?|(?|[<token-start>](.*?)[<token-end>])|(.*?))(?:$|\.+)#i',
-        'wrapKey'   => '{{%s}}',
+        'wrapKey'   => '{%s}',
         'wildcards' => [
             '<token-start>' => ['\'', '\"', '\[', '\(', '\{'],
             '<token-end>'   => ['\'', '\"', '\]', '\)', '\}'],
@@ -127,9 +127,11 @@ trait DotPathTrait
     {
         return (
             \implode(
-                '',
+                '.',
                 \array_map(
-                    [static::class, 'wrapSegmentKey'],
+                    function ($segment) {
+                        return static::wrapSegmentKey($segment);
+                    },
                     $segments
                 )
             )
@@ -139,33 +141,33 @@ trait DotPathTrait
 
     /**
      * Flatten the internal array using the dot delimiter,
-     * also the keys are wrapped inside {{key}} (2 x curly braces).
+     * also the keys are wrapped inside {key} (1 x curly braces).
      *
-     * @param array  $items
-     * @param string $prepend
+     * @param array $items
+     * @param array $prepend
      *
      * @return array
      */
-    protected static function flatten(array $items, $prepend = '')
+    protected static function flatten(array $items, $prepend = [])
     {
         $flatten = [];
 
         foreach ($items as $key => $value) {
-            $wrapKey = static::wrapSegmentKey($key);
-
             if (\is_array($value) && !empty($value)) {
                 $flatten = array_merge(
                     $flatten,
                     static::flatten(
                         $value,
-                        ($prepend . $wrapKey . '.')
+                        array_merge($prepend, [$key])
                     )
                 );
 
                 continue;
             }
 
-            $flatten[$prepend . $wrapKey] = $value;
+            $segmentsToKey = static::segmentsToKey(array_merge($prepend, [$key]));
+
+            $flatten[$segmentsToKey] = $value;
         }
 
         return $flatten;
