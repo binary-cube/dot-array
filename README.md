@@ -8,14 +8,13 @@ Accessing PHP Arrays via DOT notation is easy as:
 ```php
 DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{some.dotted.key}')
 ```
-[![Minimum PHP Version `PHP >= 7.1`](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg)][php-site]
-[![Latest Stable Version](https://poser.pugx.org/binary-cube/dot-array/version)][packagist]
-[![Total Downloads](https://poser.pugx.org/binary-cube/dot-array/downloads)][packagist]
-[![Build Status](https://travis-ci.org/binary-cube/dot-array.svg?branch=master)](https://travis-ci.org/binary-cube/dot-array)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/003187f2016e4c4cb1b014ccc9bdb5c0)](https://www.codacy.com/app/microThread/dot-array)
-[![Code Coverage](https://scrutinizer-ci.com/g/binary-cube/dot-array/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/binary-cube/dot-array/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/binary-cube/dot-array/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/binary-cube/dot-array/?branch=master)
-[![License](https://poser.pugx.org/binary-cube/dot-array/license)][license]
+[![Minimum PHP Version `PHP >= 7.1`][ico-php-require]][link-php-site]
+[![Latest Stable Version][ico-version]][link-packagist]
+[![Total Downloads][ico-downloads]][link-downloads]
+[![Build Status][ico-travis]][link-travis]
+[![Code Coverage][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+[![License][ico-license]][link-license]
 
 -----
 
@@ -365,7 +364,7 @@ $dummyArray = [
 
 Have a bug or a feature request? 
 Please first read the issue guidelines and search for existing and closed issues. 
-If your problem or idea is not addressed yet, [please open a new issue][new-issue].
+If your problem or idea is not addressed yet, [please open a new issue][link-new-issue].
 
 
 
@@ -379,14 +378,14 @@ In the interest of fostering an open and welcoming environment,
 we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, 
 regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, 
 personal appearance, race, religion, or sexual identity and orientation. 
-[Read the full Code of Conduct][code-of-conduct].
+[Read the full Code of Conduct][link-code-of-conduct].
 
 
 
 
 #### Versioning
 
-Through the development of new versions, we're going use the [Semantic Versioning][semver]. 
+Through the development of new versions, we're going use the [Semantic Versioning][link-semver]. 
 
 Example: `1.0.0`.
 - Major release: increment the first digit and reset middle and last digits to zero. Introduces major changes that might break backward compatibility. E.g. 2.0.0
@@ -400,25 +399,38 @@ Example: `1.0.0`.
 
 * **Banciu N. Cristian Mihai**
 
-See also the list of [contributors][contributors] who participated in this project.
+See also the list of [contributors][link-contributors] who participated in this project.
 
 
 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE][license] file for details.
+This project is licensed under the MIT License - see the [LICENSE][link-license] file for details.
+
 
 
 
 <!-- Links -->
-[domain]:               https://binary-cube.com
-[homepage]:             https://binary-cube.com
-[git-source]:           https://github.com/binary-cube/dot-array
-[php-site]:             https://php.net
-[semver]:               https://semver.org
-[code-of-conduct]:      https://github.com/binary-cube/dot-array/blob/master/code-of-conduct.md
-[license]:              https://github.com/binary-cube/dot-array/blob/master/LICENSE
-[contributors]:         https://github.com/binary-cube/dot-array/graphs/contributors
-[new-issue]:            https://github.com/binary-cube/dot-array/issues/new
-[packagist]:            https://packagist.org/packages/binary-cube/dot-array
+[ico-php-require]:          https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square
+[ico-version]:              https://img.shields.io/packagist/v/binary-cube/dot-array.svg?style=flat-square
+[ico-downloads]:            https://img.shields.io/packagist/dt/binary-cube/dot-array.svg?style=flat-square
+[ico-travis]:               https://img.shields.io/travis/binary-cube/dot-array/master.svg?style=flat-square
+[ico-scrutinizer]:          https://img.shields.io/scrutinizer/coverage/g/binary-cube/dot-array.svg?style=flat-square
+[ico-code-quality]:         https://img.shields.io/scrutinizer/g/binary-cube/dot-array.svg?style=flat-square
+[ico-license]:              https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+
+[link-domain]:              https://binary-cube.com
+[link-homepage]:            https://binary-cube.com
+[link-git-source]:          https://github.com/binary-cube/dot-array
+[link-packagist]:           https://packagist.org/packages/binary-cube/dot-array
+[link-downloads]:           https://packagist.org/packages/binary-cube/dot-array
+[link-php-site]:            https://php.net
+[link-semver]:              https://semver.org
+[link-code-of-conduct]:     https://github.com/binary-cube/dot-array/blob/master/code-of-conduct.md
+[link-license]:             https://github.com/binary-cube/dot-array/blob/master/LICENSE
+[link-contributors]:        https://github.com/binary-cube/dot-array/graphs/contributors
+[link-new-issue]:           https://github.com/binary-cube/dot-array/issues/new
+[link-travis]:              https://travis-ci.org/binary-cube/dot-array
+[link-scrutinizer]:         https://scrutinizer-ci.com/g/binary-cube/dot-array/code-structure
+[link-code-quality]:        https://scrutinizer-ci.com/g/binary-cube/dot-array

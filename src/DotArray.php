@@ -83,7 +83,7 @@ class DotArray implements
             }
         }
 
-        return (array) (empty($items) ? [] : $items);
+        return (array) $items;
     }
 
 
