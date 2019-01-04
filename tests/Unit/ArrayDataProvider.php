@@ -1,6 +1,6 @@
 <?php
 
-namespace BinaryCube\DotArray\Tests\Integration;
+namespace BinaryCube\DotArray\Tests\Unit;
 
 /**
  * ArrayDataProvider

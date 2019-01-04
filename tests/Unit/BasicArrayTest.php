@@ -1,9 +1,8 @@
 <?php
 
-namespace BinaryCube\DotArray\Tests\Integration;
+namespace BinaryCube\DotArray\Tests\Unit;
 
 use BinaryCube\DotArray\DotArray;
-use BinaryCube\DotArray\Tests\TestCase;
 
 /**
  * BasicArrayTest
