@@ -110,7 +110,7 @@ trait DotFilteringTrait
 
 
     /**
-     * Find the first item in an array that passes the truth test, otherwise return false
+     * Find the first item in an array that passes the truth test, otherwise return false.
      * The signature of the callable must be: `function ($value, $key)`
      *
      * @param \Closure $closure

@@ -573,6 +573,8 @@ class DotArray implements
 
 
     /**
+     * Getting the internal raw array.
+     *
      * @return array
      */
     public function toArray()
@@ -582,6 +584,8 @@ class DotArray implements
 
 
     /**
+     * Getting the internal raw array as JSON.
+     *
      * @param int $options
      *
      * @return string

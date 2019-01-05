@@ -102,6 +102,8 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         ```
 
 - **clear** *(empty array <=> [])*:
+    >   Set the contents of a given key or keys to the given value (default is empty array).
+
     -   ```php
         $dot->clear('books.{sci-fi & fantasy}');
         $dot->clear('books.{sci-fi & fantasy}', null);
@@ -117,12 +119,21 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         $dot['books.{sci-fi & fantasy}'] = [];
         ```
 
+- **delete** *(unset(...))*:
+    >   Delete the given key or keys.
+
+    -   ```php
+        $dot->delete('books.{sci-fi & fantasy}');
+        $dot->delete('books.{sci-fi & fantasy}.0.name');
+        $dot->delete(['books.{sci-fi & fantasy}.0', 'books.{childre\'s books}.0']);
+        ```
+
 - **merge**:
-    >   Merges one or more arrays into master recursively.
+    >   Merges one or more arrays into master recursively.<br/>
         If each array has an element with the same string key value, the latter
-        will overwrite the former (different from array_merge_recursive).
+        will overwrite the former (different from array_merge_recursive).<br/>
         Recursive merging will be conducted if both arrays have an element of array
-        type and are having the same key.
+        type and are having the same key.<br/>
         For integer-keyed elements, the elements from the latter array will
         be appended to the former array.
 
@@ -144,30 +155,21 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         );
         ```
 
-- **delete** *(unset(...))*:
-    -   ```php
-        $dot->delete('books.{sci-fi & fantasy}');
-        $dot->delete('books.{sci-fi & fantasy}.0.name');
-        $dot->delete(['books.{sci-fi & fantasy}.0', 'books.{childre\'s books}.0']);
-        ```
-
 - **find**:
+    >   Find the first item in an array that passes the truth test, otherwise return false.<br/>
+        The signature of the callable must be: `function ($value, $key)`.
+
     -   ```php
-        /*
-            Find the first item in an array that passes the truth test, otherwise return false
-            The signature of the callable must be: `function ($value, $key)`.
-        */
         $book = $dot->get('books.{childre\'s books}')->find(function ($value, $key) {
            return $value['price'] > 0;
         });
         ```
 
 - **filter**:
+    >   Use a callable function to filter through items.<br/>
+        The signature of the callable must be: `function ($value, $key)`
+
     -   ```php
-        /*
-            Use a callable function to filter through items.
-            The signature of the callable must be: `function ($value, $key)`
-        */
         $books = $dot->get('books.{childre\'s books}')->filter(function ($value, $key) {
             return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
@@ -240,9 +242,9 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         ```
 
 - **toArray**:
-    -   ```php
-        // Getting the internal raw array.
+    >   Getting the internal raw array.
 
+    -   ```php
         // Example 1.
         $dot->toArray();
 
@@ -251,9 +253,9 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         ```
 
 - **toJson**:
-    -   ```php
-        // Getting the internal raw array as JSON.
+    >   Getting the internal raw array as JSON.
 
+    -   ```php
         // Example 1.
         $dot->toJson();
 
@@ -262,6 +264,9 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         ```
         
 - **toFlat**:
+    >   Flatten the internal array using the dot delimiter,
+        also the keys are wrapped inside {key} (1 x curly braces).
+
     -   ```php
         $dot = DotArray::create(
             [
