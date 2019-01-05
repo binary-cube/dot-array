@@ -118,6 +118,14 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         ```
 
 - **merge**:
+    >   Merges one or more arrays into master recursively.
+        If each array has an element with the same string key value, the latter
+        will overwrite the former (different from array_merge_recursive).
+        Recursive merging will be conducted if both arrays have an element of array
+        type and are having the same key.
+        For integer-keyed elements, the elements from the latter array will
+        be appended to the former array.
+
     -   ```php
         // Example 1.
         $dot->merge(['key_1' => ['some_key' => 'some_value']]);
