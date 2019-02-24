@@ -160,8 +160,10 @@
 
     <rule ref="Squiz.Commenting.BlockComment">
         <exclude name="Squiz.Commenting.BlockComment.NoEmptyLineAfter"/>
-        <exclude name="Squiz.Commenting.BlockComment.NoEmptyLineAfter"/>
         <exclude name="Squiz.Commenting.BlockComment.SingleLine"/>
+        <exclude name="Squiz.Commenting.BlockComment.CloserSameLine"/>
+        <exclude name="Squiz.Commenting.BlockComment.FirstLineIndent"/>
+        <exclude name="Squiz.Commenting.BlockComment.LineIndent"/>
     </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Commenting.EmptyCatchComment"/>
@@ -212,8 +214,10 @@
     <!-- Ensures that switch statements are defined according to PSR2. -->
     <rule ref="PSR2.ControlStructures.SwitchDeclaration"/>
 
-    <!-- Include some sniffs from other standards that don't conflict with PEAR -->
-    <rule ref="Squiz.ControlStructures.ElseIfDeclaration"/>
+    <!-- The keyword elseif SHOULD be used instead of else if so that all control keywords look like single words. -->
+    <rule ref="PSR2.ControlStructures.ElseIfDeclaration">
+        <type>error</type>
+    </rule>
 
 
     <!-- ==================== -->
