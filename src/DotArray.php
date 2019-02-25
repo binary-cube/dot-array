@@ -147,7 +147,7 @@ class DotArray implements
 
         unset($path, $matches);
 
-        return $segments;
+        return (empty($segments) ? [] : $segments);
     }
 
 
@@ -351,9 +351,11 @@ class DotArray implements
             [
                 $this, 'mergeRecursive',
             ],
-            \array_merge(
-                [$this->items],
-                \func_get_args()
+            \array_values(
+                \array_merge(
+                    [$this->items],
+                    \func_get_args()
+                )
             )
         );
 
