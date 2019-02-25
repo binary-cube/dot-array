@@ -13,7 +13,6 @@ namespace BinaryCube\DotArray\Tests\Unit;
 class ArrayDataProvider
 {
 
-
     /**
      * @return array
      */
@@ -160,6 +159,5 @@ class ArrayDataProvider
 
         return $array;
     }
-
 
 }

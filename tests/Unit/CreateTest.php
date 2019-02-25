@@ -27,7 +27,6 @@ class CreateTest extends TestCase
      */
     protected $jsonString;
 
-
     /**
      * Setup the test env.
      *
@@ -40,7 +39,6 @@ class CreateTest extends TestCase
 
         parent::setUp();
     }
-
 
     /**
      * Testing Object.
@@ -100,6 +98,5 @@ class CreateTest extends TestCase
         self::assertInstanceOf(DotArray::class, $dot);
         self::assertArrayHasKey('a', $dot->toArray());
     }
-
 
 }

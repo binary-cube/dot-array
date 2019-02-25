@@ -69,7 +69,6 @@ class DotArray implements
      */
     protected $items;
 
-
     /**
      * Creates an DotArray object.
      *
@@ -82,7 +81,6 @@ class DotArray implements
         return (new static($items));
     }
 
-
     /**
      * @param string $json
      *
@@ -92,7 +90,6 @@ class DotArray implements
     {
         return static::create(\json_decode($json, true));
     }
-
 
     /**
      * Getting the dot path pattern.
@@ -113,7 +110,6 @@ class DotArray implements
 
         return self::$dotPathPattern;
     }
-
 
     /**
      * Converts dot string path to segments.
@@ -150,7 +146,6 @@ class DotArray implements
         return (empty($segments) ? [] : $segments);
     }
 
-
     /**
      * Wrap a given string into special characters.
      *
@@ -162,7 +157,6 @@ class DotArray implements
     {
         return vsprintf(static::$dotPathConfig['wrapKey'], [$key]);
     }
-
 
     /**
      * @param array $segments
@@ -183,7 +177,6 @@ class DotArray implements
         )
         );
     }
-
 
     /**
      * Flatten the internal array using the dot delimiter,
@@ -219,7 +212,6 @@ class DotArray implements
         return $flatten;
     }
 
-
     /**
      * Return the given items as an array
      *
@@ -244,7 +236,6 @@ class DotArray implements
 
         return (array) $items;
     }
-
 
     /**
      * @param array|DotArray|mixed      $array1
@@ -275,7 +266,6 @@ class DotArray implements
         return $res;
     }
 
-
     /**
      * DotArray Constructor.
      *
@@ -288,7 +278,6 @@ class DotArray implements
         $this->uniqueIdentifier();
     }
 
-
     /**
      * DotArray Destructor.
      */
@@ -297,7 +286,6 @@ class DotArray implements
         unset($this->uniqueIdentifier);
         unset($this->items);
     }
-
 
     /**
      * Call object as function.
@@ -310,7 +298,6 @@ class DotArray implements
     {
         return $this->get($key);
     }
-
 
     /**
      * @return string
@@ -329,7 +316,6 @@ class DotArray implements
 
         return $this->uniqueIdentifier;
     }
-
 
     /**
      * Merges one or more arrays into master recursively.
@@ -362,7 +348,6 @@ class DotArray implements
         return $this;
     }
 
-
     /**
      * @param string|null|mixed $key
      * @param mixed             $default
@@ -389,7 +374,6 @@ class DotArray implements
 
         return $items;
     }
-
 
     /**
      * @param string $key
@@ -427,7 +411,6 @@ class DotArray implements
         }
     }
 
-
     /**
      * Delete the given key or keys.
      *
@@ -459,7 +442,6 @@ class DotArray implements
         }
     }
 
-
     /**
      * @param string $key
      *
@@ -471,7 +453,6 @@ class DotArray implements
 
         return ($identifier !== $this->read($key, $identifier));
     }
-
 
     /**
      * Check if a given key contains empty values (null, [], 0, false)
@@ -486,7 +467,6 @@ class DotArray implements
 
         return empty($items);
     }
-
 
     /**
      * @param null|string $key
@@ -504,7 +484,6 @@ class DotArray implements
 
         return $items;
     }
-
 
     /**
      * Set the given value to the provided key or keys.
@@ -525,7 +504,6 @@ class DotArray implements
         return $this;
     }
 
-
     /**
      * Delete the given key or keys.
      *
@@ -543,7 +521,6 @@ class DotArray implements
 
         return $this;
     }
-
 
     /**
      * Set the contents of a given key or keys to the given value (default is empty array).
@@ -564,7 +541,6 @@ class DotArray implements
         return $this;
     }
 
-
     /**
      * Returning the first value from the current array.
      *
@@ -576,7 +552,6 @@ class DotArray implements
 
         return \array_shift($items);
     }
-
 
     /**
      * Whether a offset exists
@@ -595,7 +570,6 @@ class DotArray implements
         return $this->has($offset);
     }
 
-
     /**
      * Offset to retrieve
      *
@@ -611,7 +585,6 @@ class DotArray implements
     {
         return $this->read($offset, null);
     }
-
 
     /**
      * Offset to set
@@ -629,7 +602,6 @@ class DotArray implements
     {
         $this->write($offset, $value);
     }
-
 
     /**
      * Offset to unset
@@ -652,7 +624,6 @@ class DotArray implements
         $this->remove($offset);
     }
 
-
     /**
      * Count elements of an object
      *
@@ -669,7 +640,6 @@ class DotArray implements
         return \count($this->items, $mode);
     }
 
-
     /**
      * Specify data which should be serialized to JSON
      *
@@ -685,7 +655,6 @@ class DotArray implements
         return $this->items;
     }
 
-
     /**
      * String representation of object
      *
@@ -699,7 +668,6 @@ class DotArray implements
     {
         return \serialize($this->items);
     }
-
 
     /**
      * Constructs the object
@@ -717,7 +685,6 @@ class DotArray implements
         $this->items = \unserialize($serialized);
     }
 
-
     /**
      * Retrieve an external iterator.
      *
@@ -732,7 +699,6 @@ class DotArray implements
         return new \ArrayIterator($this->items);
     }
 
-
     /**
      * Getting the internal raw array.
      *
@@ -742,7 +708,6 @@ class DotArray implements
     {
         return $this->items;
     }
-
 
     /**
      * Getting the internal raw array as JSON.
@@ -756,7 +721,6 @@ class DotArray implements
         return (string) \json_encode($this->items, $options);
     }
 
-
     /**
      * Flatten the internal array using the dot delimiter,
      * also the keys are wrapped inside {key} (1 x curly braces).
@@ -767,6 +731,5 @@ class DotArray implements
     {
         return static::flatten($this->items);
     }
-
 
 }

@@ -13,7 +13,6 @@ namespace BinaryCube\DotArray;
 trait DotFilteringTrait
 {
 
-
     /**
      * List with internal operators and the associated callbacks.
      *
@@ -108,7 +107,6 @@ trait DotFilteringTrait
         ];
     }
 
-
     /**
      * Find the first item in an array that passes the truth test, otherwise return false.
      * The signature of the callable must be: `function ($value, $key)`
@@ -131,7 +129,6 @@ trait DotFilteringTrait
 
         return false;
     }
-
 
     /**
      * Use a callable function to filter through items.
@@ -163,7 +160,6 @@ trait DotFilteringTrait
             )
         );
     }
-
 
     /**
      * Allow to filter an array using one of the following comparison operators:
@@ -217,7 +213,6 @@ trait DotFilteringTrait
         return $this->filter($closure);
     }
 
-
     /**
      * Filtering through array.
      * The signature of the call can be:
@@ -267,6 +262,5 @@ trait DotFilteringTrait
 
         return $this->filterBy($property, $comparisonOperator, $value);
     }
-
 
 }

@@ -424,7 +424,7 @@
     -->
     <rule ref="Squiz.WhiteSpace.FunctionSpacing">
         <properties>
-            <property name="spacing" value="2"/>
+            <property name="spacing" value="1"/>
         </properties>
     </rule>
 

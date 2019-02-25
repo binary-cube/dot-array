@@ -37,7 +37,6 @@ class BasicArrayTest extends TestCase
      */
     protected $dot;
 
-
     /**
      * Setup the test env.
      *
@@ -60,7 +59,6 @@ class BasicArrayTest extends TestCase
 
         parent::setUp();
     }
-
 
     /**
      * Testing the Get Method.
@@ -101,7 +99,6 @@ class BasicArrayTest extends TestCase
 
         self::assertIsString($this->dot['mixed_array.hello-world.{Nǐ hǎo}']);
     }
-
 
     /**
      * Testing the Set Method.
@@ -159,7 +156,6 @@ class BasicArrayTest extends TestCase
         self::assertSame([], $this->dot->set(null, null)->toArray());
     }
 
-
     /**
      * Testing the Has Method.
      *
@@ -189,7 +185,6 @@ class BasicArrayTest extends TestCase
         self::assertNotTrue($this->dot->has('a.b.c.d'));
     }
 
-
     /**
      * Testing the isEmpty Method.
      *
@@ -218,7 +213,6 @@ class BasicArrayTest extends TestCase
         self::assertIsBool($this->dot->isEmpty('dotObject'));
         self::assertIsBool($this->dot->get('dotObject')->isEmpty());
     }
-
 
     /**
      * Testing the Delete Method.
@@ -254,7 +248,6 @@ class BasicArrayTest extends TestCase
         self::assertTrue(array_key_exists('one', $this->dot['assoc_array']));
     }
 
-
     /**
      * Testing the Clear Method.
      *
@@ -281,7 +274,6 @@ class BasicArrayTest extends TestCase
         self::assertEmpty($this->dot->get('assoc_array.three')->toArray());
         self::assertEmpty($users->toArray());
     }
-
 
     /**
      * Testing the Merge Method.
@@ -374,7 +366,6 @@ class BasicArrayTest extends TestCase
         self::assertCount(3, $this->dot->get('mixed_array.{👋.🤘.some-key}.config.memcached.servers'));
     }
 
-
     /**
      * Testing the Count Method.
      *
@@ -394,7 +385,6 @@ class BasicArrayTest extends TestCase
         self::assertEquals(7, count($this->dot['indexed_array'][0]));
         self::assertEquals(1, count($this->dot['assoc_array']['three']));
     }
-
 
     /**
      * Testing the Find Method.
@@ -435,7 +425,6 @@ class BasicArrayTest extends TestCase
         );
     }
 
-
     /**
      * Testing the Filter Method.
      *
@@ -459,7 +448,6 @@ class BasicArrayTest extends TestCase
         $under = DotArray::create([1, 2, 3, 4])->filter();
         self::assertSame([1, 2, 3, 4], $under->toArray());
     }
-
 
     /**
      * Testing the FilterBy Method.
@@ -571,7 +559,6 @@ class BasicArrayTest extends TestCase
         );
     }
 
-
     /**
      * Testing the Where Method.
      *
@@ -645,7 +632,6 @@ class BasicArrayTest extends TestCase
         self::assertSame($user1, $users->toArray());
     }
 
-
     /**
      * Testing the First Method.
      *
@@ -663,7 +649,6 @@ class BasicArrayTest extends TestCase
         );
     }
 
-
     /**
      * Testing the toArray Method.
      *
@@ -678,7 +663,6 @@ class BasicArrayTest extends TestCase
         self::assertIsArray($this->dot->toArray());
         self::assertSame($this->data, $this->dot->toArray());
     }
-
 
     /**
      * Testing the toJson Method.
@@ -698,7 +682,6 @@ class BasicArrayTest extends TestCase
         self::assertSame($this->jsonString, $jsonFromObject);
         self::assertSame($this->jsonArray, $decode);
     }
-
 
     /**
      * Testing the toFlat Method.
@@ -747,7 +730,6 @@ class BasicArrayTest extends TestCase
         );
     }
 
-
     /**
      * Testing the serialize & unserialize Methods.
      *
@@ -774,7 +756,6 @@ class BasicArrayTest extends TestCase
         self::assertInstanceOf(DotArray::class, $unserialize);
     }
 
-
     /**
      * Testing the jsonSerialize Methods.
      *
@@ -786,7 +767,6 @@ class BasicArrayTest extends TestCase
     {
         self::assertSame($this->data, $this->dot->jsonSerialize());
     }
-
 
     /**
      * Testing the getIterator Methods.
@@ -801,6 +781,5 @@ class BasicArrayTest extends TestCase
         self::assertInstanceOf(\ArrayIterator::class, $this->dot->getIterator());
         self::assertSame($this->data, $this->dot->getIterator()->getArrayCopy());
     }
-
 
 }
