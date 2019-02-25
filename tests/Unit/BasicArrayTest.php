@@ -65,7 +65,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Get Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::get
      * @covers \BinaryCube\DotArray\DotArray::toArray
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -107,7 +106,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Set Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::set
      * @covers \BinaryCube\DotArray\DotArray::toArray
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -165,7 +163,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Has Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::has
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -196,7 +193,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the isEmpty Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::isEmpty
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -227,7 +223,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Delete Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::delete
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -263,7 +258,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Clear Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::clear
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -292,7 +286,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Merge Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::merge
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -385,7 +378,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Count Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::count
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -407,7 +399,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Find Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::find
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -448,7 +439,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Filter Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::filter
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -474,7 +464,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the FilterBy Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::filterBy
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -586,7 +575,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the Where Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotFilteringTrait
      * @covers \BinaryCube\DotArray\DotArray::where
      * @covers \BinaryCube\DotArray\DotArray::<protected>
@@ -661,7 +649,6 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the First Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
      * @covers \BinaryCube\DotArray\DotArray::first
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
@@ -716,10 +703,9 @@ class BasicArrayTest extends TestCase
     /**
      * Testing the toFlat Method.
      *
-     * @covers \BinaryCube\DotArray\DotPathTrait
-     * @covers \BinaryCube\DotArray\DotPathTrait::flatten
-     * @covers \BinaryCube\DotArray\DotPathTrait::dotPathPattern
-     * @covers \BinaryCube\DotArray\DotPathTrait::wrapSegmentKey
+     * @covers \BinaryCube\DotArray\DotArray::flatten
+     * @covers \BinaryCube\DotArray\DotArray::dotPathPattern
+     * @covers \BinaryCube\DotArray\DotArray::wrapSegmentKey
      * @covers \BinaryCube\DotArray\DotArray::toFlat
      * @covers \BinaryCube\DotArray\DotArray::<protected>
      * @covers \BinaryCube\DotArray\DotArray::<static>
