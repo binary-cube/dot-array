@@ -61,6 +61,74 @@ class BasicArrayTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public function tokens()
+    {
+        $array = [
+            'a' => [
+                'b' => [
+                    'c' => true,
+                ],
+            ],
+        ];
+
+        return [
+            [
+                'path' => 'a.b.c',
+                'array' => $array,
+            ],
+            [
+                'path' => "'a'.'b'.'c'",
+                'array' => $array,
+            ],
+            [
+                'path' => '"a"."b"."c"',
+                'array' => $array,
+            ],
+            [
+                'path' => '[a].[b].[c]',
+                'array' => $array,
+            ],
+            [
+                'path' => '(a).(b).(c)',
+                'array' => $array,
+            ],
+            [
+                'path' => '{a}.{b}.{c}',
+                'array' => $array,
+            ],
+            [
+                'path' => '[a].(b).{c}',
+                'array' => $array,
+            ],
+        ];
+    }
+
+    /**
+     * Testing different patterns.
+     *
+     * @param string $path  The query pattern
+     * @param array  $array The array
+     *
+     * @covers \BinaryCube\DotArray\DotArray::get
+     * @covers \BinaryCube\DotArray\DotArray::toArray
+     * @covers \BinaryCube\DotArray\DotArray::<protected>
+     * @covers \BinaryCube\DotArray\DotArray::<static>
+     *
+     * @dataProvider tokens
+     *
+     * @return void
+     */
+    public function testTokens($path, $array)
+    {
+        $dot = DotArray::create($array);
+
+        self::assertInstanceOf(DotArray::class, $dot);
+        self::assertTrue($dot->get($path));
+    }
+
+    /**
      * Testing the Get Method.
      *
      * @covers \BinaryCube\DotArray\DotArray::get
@@ -687,7 +755,7 @@ class BasicArrayTest extends TestCase
      * Testing the toFlat Method.
      *
      * @covers \BinaryCube\DotArray\DotArray::flatten
-     * @covers \BinaryCube\DotArray\DotArray::dotPathPattern
+     * @covers \BinaryCube\DotArray\DotArray::pathPattern
      * @covers \BinaryCube\DotArray\DotArray::wrapSegmentKey
      * @covers \BinaryCube\DotArray\DotArray::toFlat
      * @covers \BinaryCube\DotArray\DotArray::<protected>
