@@ -130,7 +130,7 @@ class DotArray implements
      */
     final protected static function wrapSegmentKey($key)
     {
-        return vsprintf(self::WRAP_KEY, [$key]);
+        return \vsprintf(self::WRAP_KEY, [$key]);
     }
 
     /**
@@ -168,18 +168,11 @@ class DotArray implements
 
         foreach ($items as $key => $value) {
             if (\is_array($value) && !empty($value)) {
-                $flatten = array_merge(
-                    $flatten,
-                    self::flatten(
-                        $value,
-                        array_merge($prepend, [$key])
-                    )
-                );
-
+                $flatten = \array_merge($flatten, self::flatten($value, \array_merge($prepend, [$key])));
                 continue;
             }
 
-            $segmentsToKey = self::segmentsToKey(array_merge($prepend, [$key]));
+            $segmentsToKey = self::segmentsToKey(\array_merge($prepend, [$key]));
 
             $flatten[$segmentsToKey] = $value;
         }
@@ -291,12 +284,7 @@ class DotArray implements
             [
                 $this, 'mergeRecursive',
             ],
-            \array_values(
-                \array_merge(
-                    [$this->items],
-                    \func_get_args()
-                )
-            )
+            \array_values(\array_merge([$this->items], \func_get_args()))
         );
 
         return $this;
@@ -314,10 +302,7 @@ class DotArray implements
         $items    = &$this->items;
 
         foreach ($segments as $segment) {
-            if (
-                !\is_array($items)
-                || !\array_key_exists($segment, $items)
-            ) {
+            if (!\is_array($items) || !\array_key_exists($segment, $items)) {
                 return $default;
             }
 
@@ -381,12 +366,10 @@ class DotArray implements
         for ($i = 0; $i < $count; $i++) {
             $segment = $segments[$i];
 
-            // Nothing to unset.
             if (!\array_key_exists($segment, $items)) {
                 break;
             }
 
-            // Last item, time to unset.
             if ($i === ($count - 1)) {
                 unset($items[$segment]);
                 break;
@@ -417,9 +400,7 @@ class DotArray implements
      */
     public function isEmpty($key = null)
     {
-        $items = $this->read($key, null);
-
-        return empty($items);
+        return empty($this->read($key, null));
     }
 
     /**
@@ -497,14 +478,13 @@ class DotArray implements
 
     /**
      * Returning the first value from the current array.
+     * False otherwise, in case the list is empty.
      *
      * @return mixed
      */
     public function first()
     {
-        $items = $this->items;
-
-        return \array_shift($items);
+        return \reset($this->items);
     }
 
     /**
