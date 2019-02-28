@@ -112,7 +112,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         // Multiple keys.
         $dot->clear([
           'books.{sci-fi & fantasy}',
-          'books.{childre\'s books}'
+          'books.{children\'s books}'
         ]);
         
         // Vanilla PHP.
@@ -125,7 +125,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
     -   ```php
         $dot->delete('books.{sci-fi & fantasy}');
         $dot->delete('books.{sci-fi & fantasy}.0.name');
-        $dot->delete(['books.{sci-fi & fantasy}.0', 'books.{childre\'s books}.0']);
+        $dot->delete(['books.{sci-fi & fantasy}.0', 'books.{children\'s books}.0']);
         ```
 
 - **merge**:
@@ -160,7 +160,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         The signature of the callable must be: `function ($value, $key)`.
 
     -   ```php
-        $book = $dot->get('books.{childre\'s books}')->find(function ($value, $key) {
+        $book = $dot->get('books.{children\'s books}')->find(function ($value, $key) {
            return $value['price'] > 0;
         });
         ```
@@ -170,7 +170,7 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         The signature of the callable must be: `function ($value, $key)`
 
     -   ```php
-        $books = $dot->get('books.{childre\'s books}')->filter(function ($value, $key) {
+        $books = $dot->get('books.{children\'s books}')->filter(function ($value, $key) {
             return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
         
@@ -195,13 +195,13 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
                 - [ not-between ]
         */
         // Example 1.
-        $books = $dot->get('books.{childre\'s books}')->filterBy('price', 'between', 5, 12);
+        $books = $dot->get('books.{children\'s books}')->filterBy('price', 'between', 5, 12);
 
         // Example 2.
-        $books = $dot->get('books.{childre\'s books}')->filterBy('price', '>', 10);
+        $books = $dot->get('books.{children\'s books}')->filterBy('price', '>', 10);
 
         // Example 3.
-        $books = $dot->get('books.{childre\'s books}')->filterBy('price', 'in', [8.5, 15.49]);
+        $books = $dot->get('books.{children\'s books}')->filterBy('price', 'in', [8.5, 15.49]);
         ```
 
 - **where**:
@@ -227,16 +227,16 @@ DotArray::create(['config' => ['some.dotted.key' => 'value']])->get('config.{som
         */
         
         // Example 1. (using the signature: [property, comparisonOperator, ...value])
-        $books = $dot->get('books.{childre\'s books}')->where(['price', 'between', 5, 12]);
+        $books = $dot->get('books.{children\'s books}')->where(['price', 'between', 5, 12]);
 
         // Example 2. (using the signature: [property, comparisonOperator, ...value])
-        $books = $dot->get('books.{childre\'s books}')->where(['price', '>', 10]);
+        $books = $dot->get('books.{children\'s books}')->where(['price', '>', 10]);
         
         // Example 3. (using the signature: [property, comparisonOperator, ...value])
-        $books = $dot->get('books.{childre\'s books}')->where(['price', 'in', [8.5, 15.49]]);
+        $books = $dot->get('books.{children\'s books}')->where(['price', 'in', [8.5, 15.49]]);
         
         // Example 4. (using the signature: \Closure)
-        $books = $dot->get('books.{childre\'s books}')->where(function ($value, $key) {
+        $books = $dot->get('books.{children\'s books}')->where(function ($value, $key) {
             return $value['name'] === 'Harry Potter and the Order of the Phoenix';
         });
         ```
@@ -337,7 +337,7 @@ $dummyArray = [
                 ],
             ],
         
-        'childre\'s books' => 
+        'children\'s books' => 
             [
                 [
                     'name'      => 'Harry Potter and the Order of the Phoenix',

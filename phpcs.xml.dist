@@ -12,12 +12,12 @@
     <exclude-pattern>*/vendor/*</exclude-pattern>
 
     <!-- You can hard-code custom php.ini settings into your custom standard. -->
-    <ini name="memory_limit" value="128M"/>
+    <ini name="memory_limit" value="256M"/>
 
     <!-- Call with arguments -->
     <arg name="report" value="full"/>
     <arg name="extensions" value="php"/>
-    <arg name="parallel" value="50"/>
+    <arg name="parallel" value="10"/>
     <arg name="encoding" value="utf-8"/>
     <arg name="tab-width" value="4"/>
     <arg value="np"/>
@@ -155,8 +155,6 @@
     <!-- ========================= -->
     <!-- === Commenting Sniffs === -->
     <!-- ========================= -->
-
-    <!-- <rule ref="Squiz.Commenting.ClosingDeclarationComment"/> -->
 
     <rule ref="Squiz.Commenting.BlockComment">
         <exclude name="Squiz.Commenting.BlockComment.NoEmptyLineAfter"/>
