@@ -1,6 +1,14 @@
 DotArray Change Log 
 =====================
 
+1.1.0 March 02, 2019
+-----------------------------
+- Remove DotArray::uniqueIdentifier 
+- Remove DotPathTrait - parts have been moved into DotArray 
+- Code Standard Improvements
+- Refactoring DotArray:
+- More Tests. 
+
 1.0.5 December 30, 2018
 -----------------------------
 
