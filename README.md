@@ -1,4 +1,4 @@
-# DotArray - Sail through array using the dot notation
+# PHP Dot-Array :: Sail through array using the dot notation
 
 
 <p align="center">~ Enjoy your :coffee: ~</p>

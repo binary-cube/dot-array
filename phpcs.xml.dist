@@ -229,9 +229,6 @@
 
     <rule ref="Squiz.Formatting.OperatorBracket"/>
 
-    <!-- Ensures there is exactly 1 space before a type cast, unless the cast statement is indented or multi-line. -->
-    <rule ref="Generic.Formatting.SpaceBeforeCast"/>
-
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
 
     <!-- Checks alignment of assignments. -->

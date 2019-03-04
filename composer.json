@@ -1,9 +1,9 @@
 {
     "name": "binary-cube/dot-array",
-    "description": "Navigate through array using JSON Dot notation path.",
+    "description": "PHP Dot-Array :: Sail through array using the dot notation",
 
     "keywords": [
-        "DotArray", "dot-array", "array", "dot", "php-array", "php-array-json-path"
+        "DotArray", "dot-array", "array", "dot", "php-array", "php-array-json-path", "php"
     ],
 
     "type": "library",
