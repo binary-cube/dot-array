@@ -162,6 +162,7 @@
         <exclude name="Squiz.Commenting.BlockComment.CloserSameLine"/>
         <exclude name="Squiz.Commenting.BlockComment.FirstLineIndent"/>
         <exclude name="Squiz.Commenting.BlockComment.LineIndent"/>
+        <exclude name="Squiz.Commenting.BlockComment.NoNewLine"/>
     </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Commenting.EmptyCatchComment"/>
