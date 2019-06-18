@@ -1,5 +1,5 @@
-.. title:: PHP Dot-Array :: Sail through array using the dot notation
+.. title:: PHP DotArray Library:: Sail through array using the DOT notation
 
 ====================
-Dot-Array
+DotArray
 ====================
