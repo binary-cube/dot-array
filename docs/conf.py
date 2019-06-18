@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Dot-Array'
+project = 'DotArray'
 copyright = '2019, Banciu N. Cristian Mihai'
 
 # The full version, including alpha/beta/rc tags
