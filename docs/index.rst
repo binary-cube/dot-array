@@ -6,6 +6,10 @@ DotArray
 
 .. raw:: html
 
+    <a href="https://github.com/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none">
+        <img src="https://img.shields.io/badge/source-GitHub-8892BF.svg?style=flat-square"/>
+    </a>
+
     <a href="https://php.net" target="_blank" style="display: inline-block; position: relative; border: none">
         <img src="https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square"/>
     </a>
@@ -33,6 +37,8 @@ DotArray
     <a href="https://github.com/binary-cube/dot-array/blob/master/LICENSE" target="_blank" style="display: inline-block; position: relative; border: none">
         <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"/>
     </a>
+
+    <br/><br/>
 
 DotArray is a simple PHP Library that can access an array in a dotted manner.
 
