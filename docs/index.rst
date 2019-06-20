@@ -6,35 +6,35 @@ DotArray
 
 .. raw:: html
 
-    <a href="https://github.com/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://github.com/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/badge/source-GitHub-8892BF.svg?style=flat-square"/>
     </a>
 
-    <a href="https://php.net" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://php.net" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square"/>
     </a>
 
-    <a href="https://packagist.org/packages/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://packagist.org/packages/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/packagist/v/binary-cube/dot-array.svg?style=flat-square"/>
     </a>
 
-    <a href="https://packagist.org/packages/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://packagist.org/packages/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/packagist/dt/binary-cube/dot-array.svg?style=flat-square"/>
     </a>
 
-    <a href="https://travis-ci.org/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://travis-ci.org/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/travis/binary-cube/dot-array/master.svg?style=flat-square"/>
     </a>
 
-    <a href="https://scrutinizer-ci.com/g/binary-cube/dot-array/code-structure" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://scrutinizer-ci.com/g/binary-cube/dot-array/code-structure" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/scrutinizer/coverage/g/binary-cube/dot-array.svg?style=flat-square"/>
     </a>
 
-    <a href="https://scrutinizer-ci.com/g/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://scrutinizer-ci.com/g/binary-cube/dot-array" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/scrutinizer/g/binary-cube/dot-array.svg?style=flat-square"/>
     </a>
 
-    <a href="https://github.com/binary-cube/dot-array/blob/master/LICENSE" target="_blank" style="display: inline-block; position: relative; border: none">
+    <a href="https://github.com/binary-cube/dot-array/blob/master/LICENSE" target="_blank" style="display: inline-block; position: relative; border: none; text-decoration: none;">
         <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"/>
     </a>
 
